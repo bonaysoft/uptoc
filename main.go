@@ -11,6 +11,7 @@ import (
 	"github.com/urfave/cli"
 
 	"uptoc/oss"
+	"uptoc/version"
 )
 
 const (
@@ -67,7 +68,7 @@ func main() {
 	app.Usage = "A cli tool to upload the dist file for the cloud engine."
 	app.Copyright = "(c) 2019 uptoc.saltbo.cn"
 	app.Compiled = time.Now()
-	//app.Version = version.Long
+	app.Version = version.Long
 	app.Flags = appFlags
 	app.Action = func(c *cli.Context) {
 		endpoint := c.String(UPTOC_ENDPOINT)
