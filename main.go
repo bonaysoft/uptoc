@@ -160,8 +160,7 @@ func uploadObjects(uploader Uploader, dirPath string, objects []string) error {
 func cleanDeletedObjects(uploader Uploader, objects []string) {
 	log.Printf("found %d deleted files, cleaning...", len(objects))
 	for _, obj := range objects {
-		err := uploader.Delete(obj)
-		if err != nil {
+		if err := uploader.Delete(obj); err != nil {
 			log.Printf("remove the file %s failed: %s", err)
 		}
 	}
