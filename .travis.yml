@@ -19,6 +19,7 @@ deploy:
   - provider: releases
     api_key: $GITHUB_TOKEN
     skip_cleanup: true
+    file_glob: true
     file:
       - build/*.tar.gz
     on:
