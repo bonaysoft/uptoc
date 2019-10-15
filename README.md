@@ -20,7 +20,7 @@
 Download the appropriate binary for your platform from the [Releases](https://github.com/saltbo/uptoc/releases) page, or:
 
 ```sh
-go get github.com/saltbo/uptoc
+curl -sSf http://uptoc.saltbo.cn/install.sh | sh
 ```
 
 ## Usage
