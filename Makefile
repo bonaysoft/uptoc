@@ -20,11 +20,8 @@ install:
 	go mod download
 
 build:
-	GOOS=linux GOARCH=386 go build -ldflags ${LDFLAGS} -o ${TARGET_PATH}-linux-386/${BINARY}
+	GOOS=darwin GOARCH=amd64 go build -ldflags ${LDFLAGS} -o ${TARGET_PATH}-macos/${BINARY}
 	GOOS=linux GOARCH=amd64 go build -ldflags ${LDFLAGS} -o ${TARGET_PATH}-linux-amd64/${BINARY}
-	GOOS=darwin GOARCH=386 go build -ldflags ${LDFLAGS} -o ${TARGET_PATH}-darwin-386/${BINARY}
-	GOOS=darwin GOARCH=amd64 go build -ldflags ${LDFLAGS} -o ${TARGET_PATH}-darwin-amd64/${BINARY}
-	GOOS=windows GOARCH=386 go build -ldflags ${LDFLAGS} -o ${TARGET_PATH}-windows-386/${BINARY}
 	GOOS=windows GOARCH=amd64 go build -ldflags ${LDFLAGS} -o ${TARGET_PATH}-windows-amd64/${BINARY}
 
 test:
@@ -35,11 +32,8 @@ covhtml:
 	go tool cover -html=coverage.txt
 
 pack:
-	tar -C ${TARGET_DIR} -zvcf ${TARGET_PATH}-linux-386.tar.gz ${BINARY}-linux-386/${BINARY}
+	tar -C ${TARGET_DIR} -zvcf ${TARGET_PATH}-macos.tar.gz ${BINARY}-macos/${BINARY}
 	tar -C ${TARGET_DIR} -zvcf ${TARGET_PATH}-linux-amd64.tar.gz ${BINARY}-linux-amd64/${BINARY}
-	tar -C ${TARGET_DIR} -zvcf ${TARGET_PATH}-darwin-386.tar.gz ${BINARY}-darwin-386/${BINARY}
-	tar -C ${TARGET_DIR} -zvcf ${TARGET_PATH}-darwin-amd64.tar.gz ${BINARY}-darwin-amd64/${BINARY}
-	tar -C ${TARGET_DIR} -zvcf ${TARGET_PATH}-windows-386.tar.gz ${BINARY}-windows-386/${BINARY}
 	tar -C ${TARGET_DIR} -zvcf ${TARGET_PATH}-windows-amd64.tar.gz ${BINARY}-windows-amd64/${BINARY}
 
 clean:
