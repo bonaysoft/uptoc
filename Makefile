@@ -32,9 +32,9 @@ covhtml:
 	go tool cover -html=coverage.txt
 
 pack:
-	tar -C ${TARGET_DIR} -zvcf ${TARGET_PATH}-macos.tar.gz ${BINARY}-macos/${BINARY}
-	tar -C ${TARGET_DIR} -zvcf ${TARGET_PATH}-linux-amd64.tar.gz ${BINARY}-linux-amd64/${BINARY}
-	tar -C ${TARGET_DIR} -zvcf ${TARGET_PATH}-windows-amd64.tar.gz ${BINARY}-windows-amd64/${BINARY}
+	tar -C ${TARGET_DIR}/${BINARY}-macos -zvcf ${TARGET_PATH}-macos.tar.gz ${BINARY}
+	tar -C ${TARGET_DIR}/${BINARY}-linux-amd64 -zvcf ${TARGET_PATH}-linux-amd64.tar.gz ${BINARY}
+	tar -C ${TARGET_DIR}/${BINARY}-windows-amd64 -zvcf ${TARGET_PATH}-windows-amd64.tar.gz ${BINARY}
 
 clean:
 	rm -rf ${TARGET_DIR}
