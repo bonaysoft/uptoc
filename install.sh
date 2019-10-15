@@ -33,13 +33,8 @@ if [ $? -eq 0 ]
 then
   echo "${GREEN}"
   echo "Installation completed successfully."
-#  echo "$ wallet713 --version"
-#  ${bin_dir}/wallet713 --version
-#  if echo ":$PATH:"| grep -q  ".*:${bin_dir}:.*"; then
-#    echo "\nRun 'wallet713' from the command line to open the wallet"
-#  else
-#  	echo "${YELLOW}\nPlease open a new terminal window to run 'wallet713' from the command-line"
-#  fi
+  echo "$ uptoc --version"
+  ${bin_dir}/uptoc --version
 else
   echo "${RED}"
   echo "Failed installing uptoc"
