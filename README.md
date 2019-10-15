@@ -24,6 +24,9 @@ curl -sSf http://uptoc.saltbo.cn/install.sh | sh
 ```
 
 ## Usage
+```sh
+uptoc --endpoint oss-cn-beijing.aliyuncs.com --bucket demo-bucket --access_key LTAI4FxxxxxxxBXmS3 --access_secret Vt1FZgxxxxxxxxxxxxKp380AI /opt/blog/public
+```
 
 
 ## Contact us
