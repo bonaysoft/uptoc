@@ -30,8 +30,8 @@ uptoc --endpoint oss-cn-beijing.aliyuncs.com --access_key LTAI4FxxxxxxxBXmS3 --a
 
 And the access-key and access-secret support settings by the system environment
 ```bash
-export LTAI4FxxxxxxxBXmS3
-export Vt1FZgxxxxxxxxxxxxKp380AI
+export UPTOC_UPLOADER_KEYID=LTAI4FxxxxxxxBXmS3
+export UPTOC_UPLOADER_KEYSECRET=Vt1FZgxxxxxxxxxxxxKp380AI
 
 uptoc --endpoint oss-cn-beijing.aliyuncs.com --bucket blog-bucket /opt/blog/public
 ```
