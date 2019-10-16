@@ -36,5 +36,9 @@ pack:
 	tar -C ${TARGET_DIR}/${BINARY}-linux-amd64 -zvcf ${TARGET_PATH}-linux-amd64.tar.gz ${BINARY}
 	tar -C ${TARGET_DIR}/${BINARY}-windows-amd64 -zvcf ${TARGET_PATH}-windows-x64.tar.gz ${BINARY}
 
+	sha256sum ${TARGET_PATH}-macos.tar.gz >> ${TARGET_PATH}-macos-sha256sum.txt
+	sha256sum ${TARGET_PATH}-linux-amd64.tar.gz >> ${TARGET_PATH}-linux-sha256sum.txt
+	sha256sum ${TARGET_PATH}-windows-x64.tar.gz >> ${TARGET_PATH}-windows-sha256sum.txt
+
 clean:
 	rm -rf ${TARGET_DIR}
