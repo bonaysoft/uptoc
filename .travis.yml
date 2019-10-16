@@ -23,3 +23,5 @@ deploy:
     file:
       - build/*.tar.gz
       - build/*-sha256sum.txt
+    on:
+      tags: true
