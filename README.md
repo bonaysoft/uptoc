@@ -4,7 +4,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/saltbo/uptoc)](https://goreportcard.com/report/github.com/saltbo/uptoc)&nbsp;
 [![Coverage Status](https://coveralls.io/repos/github/saltbo/uptoc/badge.svg?branch=master)](https://coveralls.io/github/saltbo/uptoc?branch=master)
 
-`uptoc` is tool to upload the static file for the cloud engine.
+`uptoc` is a cli tool for deploying files to the cloud storage.
 
 ## Run environment
 - Mac
