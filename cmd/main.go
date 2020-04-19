@@ -14,15 +14,12 @@ import (
 )
 
 const (
-	// core configs
-	UPTOC_UPLOADER_OSS = "oss"
-
 	// uploader configs from os envs
 	UPTOC_UPLOADER_KEYID     = "UPTOC_UPLOADER_KEYID"
 	UPTOC_UPLOADER_KEYSECRET = "UPTOC_UPLOADER_KEYSECRET"
 
 	// config from cmd flags
-	UPTOC_UPLOADER  = "core"
+	UPTOC_DRIVER    = "driver"
 	UPTOC_ENDPOINT  = "endpoint"
 	UPTOC_KEYID     = "access_key"
 	UPTOC_KEYSECRET = "access_secret"
@@ -39,30 +36,30 @@ var (
 
 	flags = []cli.Flag{
 		cli.StringFlag{
-			Name:  UPTOC_UPLOADER,
+			Name:  UPTOC_DRIVER,
 			Usage: "specify cloud storage engine",
-			Value: UPTOC_UPLOADER_OSS,
+			Value: "oss",
 		},
 		cli.StringFlag{
 			Name:     UPTOC_ENDPOINT,
-			Usage:    "specify endpoint of the core",
+			Usage:    "specify endpoint of the cloud platform",
 			Required: true,
 		},
 		cli.StringFlag{
 			Name:     UPTOC_KEYID,
-			Usage:    "specify uploader key id of the core",
+			Usage:    "specify key id of the cloud platform",
 			EnvVar:   UPTOC_UPLOADER_KEYID,
 			Required: true,
 		},
 		cli.StringFlag{
 			Name:     UPTOC_KEYSECRET,
-			Usage:    "specify uploader key secret of the core",
+			Usage:    "specify key secret of the cloud platform",
 			EnvVar:   UPTOC_UPLOADER_KEYSECRET,
 			Required: true,
 		},
 		cli.StringFlag{
 			Name:     UPTOC_BUCKET,
-			Usage:    "specify bucket name of the core",
+			Usage:    "specify bucket name of the cloud platform",
 			Required: true,
 		},
 	}
@@ -83,12 +80,12 @@ func main() {
 }
 
 func action(c *cli.Context) {
-	driver := c.String(UPTOC_UPLOADER)
+	driver := c.String(UPTOC_DRIVER)
 	endpoint := c.String(UPTOC_ENDPOINT)
 	keyId := c.String(UPTOC_KEYID)
 	keySecret := c.String(UPTOC_KEYSECRET)
 	bucketName := c.String(UPTOC_BUCKET)
-	u, err := uploader.New(driver, endpoint, keyId, keySecret, bucketName)
+	uploadDriver, err := uploader.New(driver, endpoint, keyId, keySecret, bucketName)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -98,7 +95,7 @@ func action(c *cli.Context) {
 		dirPath += "/"
 	}
 
-	e := core.NewEngine(u)
+	e := core.NewEngine(uploadDriver)
 	if err := e.LoadAndCompareObjects(dirPath); err != nil {
 		log.Fatalln(err)
 	}

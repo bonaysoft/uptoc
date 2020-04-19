@@ -15,22 +15,22 @@ type Object struct {
 }
 
 // walk and upload to the cloud storage
-type Uploader interface {
+type Driver interface {
 	ListObjects() ([]Object, error)
 	Upload(object, rawPath string) error
 	Delete(object string) error
 }
 
-type Constructor func(endpoint, accessKeyID, accessKeySecret, bucketName string) (Uploader, error)
+type Constructor func(endpoint, accessKeyID, accessKeySecret, bucketName string) (Driver, error)
 
 var supportDrivers = map[string]Constructor{
 	"oss": AliOSSUploader,
 }
 
-func New(uploader, endpoint, accessKeyID, accessKeySecret, bucketName string) (Uploader, error) {
-	if constructor, ok := supportDrivers[uploader]; ok {
+func New(driver, endpoint, accessKeyID, accessKeySecret, bucketName string) (Driver, error) {
+	if constructor, ok := supportDrivers[driver]; ok {
 		return constructor(endpoint, accessKeyID, accessKeySecret, bucketName)
 	}
 
-	return nil, fmt.Errorf("uploader[%s] not support", uploader)
+	return nil, fmt.Errorf("driver[%s] not support", driver)
 }

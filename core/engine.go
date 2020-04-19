@@ -14,15 +14,15 @@ import (
 )
 
 type Engine struct {
-	uploader uploader.Uploader
+	uploader uploader.Driver
 
 	tobeUploadedObjects []uploader.Object
 	tobeDeletedObjects  []uploader.Object
 }
 
-func NewEngine(u uploader.Uploader) *Engine {
+func NewEngine(uploadDriver uploader.Driver) *Engine {
 	return &Engine{
-		uploader: u,
+		uploader: uploadDriver,
 
 		tobeUploadedObjects: make([]uploader.Object, 0),
 		tobeDeletedObjects:  make([]uploader.Object, 0),
