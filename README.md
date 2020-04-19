@@ -40,7 +40,7 @@ So you can use it like this for the travis
 ```yaml
 after_success:
   - curl -sSf http://uptoc.saltbo.cn/install.sh | sh
-  - uptoc --endpoint oss-cn-zhangjiakou.aliyuncs.com --bucket blog-bucket public
+  - uptoc --endpoint uploader-cn-zhangjiakou.aliyuncs.com --bucket blog-bucket public
 ```
 
 ## Contact us
