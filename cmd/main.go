@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -10,7 +11,6 @@ import (
 
 	"uptoc/core"
 	"uptoc/uploader"
-	"uptoc/version"
 )
 
 const (
@@ -30,10 +30,17 @@ const (
 )
 
 var (
-	appFlags = []cli.Flag{
+	// RELEASE returns the release version
+	release = "unknown"
+	// REPO returns the git repository URL
+	repo = "unknown"
+	// COMMIT returns the short sha from git
+	commit = "unknown"
+
+	flags = []cli.Flag{
 		cli.StringFlag{
 			Name:  UPTOC_UPLOADER,
-			Usage: "specify cloud storage engine. default: uploader",
+			Usage: "specify cloud storage engine",
 			Value: UPTOC_UPLOADER_OSS,
 		},
 		cli.StringFlag{
@@ -43,13 +50,13 @@ var (
 		},
 		cli.StringFlag{
 			Name:     UPTOC_KEYID,
-			Usage:    "specify endpoint of the core",
+			Usage:    "specify uploader key id of the core",
 			EnvVar:   UPTOC_UPLOADER_KEYID,
 			Required: true,
 		},
 		cli.StringFlag{
 			Name:     UPTOC_KEYSECRET,
-			Usage:    "specify endpoint of the core",
+			Usage:    "specify uploader key secret of the core",
 			EnvVar:   UPTOC_UPLOADER_KEYSECRET,
 			Required: true,
 		},
@@ -65,17 +72,17 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "uptoc"
 	app.Usage = "A cli tool to upload the dist file for the cloud engine."
-	app.Copyright = "(c) 2019 uptoc.saltbo.cn"
+	app.Copyright = "(c) 2019 saltbo.cn"
 	app.Compiled = time.Now()
-	app.Version = version.Long
-	app.Flags = appFlags
-	app.Action = appAction
+	app.Version = fmt.Sprintf("release: %s, repo: %s, commit: %s", release, repo, commit)
+	app.Flags = flags
+	app.Action = action
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func appAction(c *cli.Context) {
+func action(c *cli.Context) {
 	driver := c.String(UPTOC_UPLOADER)
 	endpoint := c.String(UPTOC_ENDPOINT)
 	keyId := c.String(UPTOC_KEYID)

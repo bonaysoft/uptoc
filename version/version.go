@@ -5,14 +5,3 @@
 package version
 
 import "fmt"
-
-var (
-	// RELEASE returns the release version
-	release = "unknown"
-	// REPO returns the git repository URL
-	repo = "unknown"
-	// COMMIT returns the short sha from git
-	commit = "unknown"
-
-	Long = fmt.Sprintf("release: %s, repo: %s, commit: %s", release, repo, commit)
-)

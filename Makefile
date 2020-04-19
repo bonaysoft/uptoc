@@ -1,44 +1,29 @@
-.PHONY: default install build fmt test vet docker clean
+.PHONY: all dep lint vet test test-coverage build clean
 
-BINARY=uptoc
-MKFILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
-MKFILE_DIR := $(dir $(MKFILE_PATH))
+# custom define
+CLIENT := cmd/main.go
 
-TARGET_DIR=${MKFILE_DIR}build
-TARGET_PATH=${TARGET_DIR}/${BINARY}
+all: build
 
-LDFLAGS="-s -w -X ${BINARY}/version.release=${RELEASE} -X ${BINARY}/version.commit=${COMMIT} -X ${BINARY}/version.repo=${GITREPO}"
+dep: ## Get the dependencies
+	@go mod download
 
-# git info
-COMMIT := git-$(shell git rev-parse --short HEAD)
-GITREPO := $(shell git config --get remote.origin.url)
-RELEASE := $(shell git describe --tags | awk -F '-' '{print $$1}')
+lint: ## Lint Golang files
+	@golangci-lint --version
+	@golangci-lint run -D errcheck
 
-default: install build
+test: ## Run tests with coverage
+	go test -coverprofile .coverprofile ./...
+	go tool cover --func=.coverprofile
 
-install:
-	go mod download
+coverage-html: ## show coverage by the html
+	go tool cover -html=.coverprofile
 
-build:
-	GOOS=darwin GOARCH=amd64 go build -ldflags ${LDFLAGS} -o ${TARGET_PATH}-macos/${BINARY}
-	GOOS=linux GOARCH=amd64 go build -ldflags ${LDFLAGS} -o ${TARGET_PATH}-linux-amd64/${BINARY}
-	GOOS=windows GOARCH=amd64 go build -ldflags ${LDFLAGS} -o ${TARGET_PATH}-windows-amd64/${BINARY}
+build: dep ## Build the binary file
+	@go build -o build/bin/client $(CLIENT)
 
-test:
-	go test -coverprofile=coverage.txt -covermode=atomic ./...
-    go tool cover --func=coverage.txt
+clean: ## Remove previous build
+	@rm -f ./build
 
-covhtml:
-	go tool cover -html=coverage.txt
-
-pack:
-	tar -C ${TARGET_DIR}/${BINARY}-macos -zvcf ${TARGET_PATH}-macos.tar.gz ${BINARY}
-	tar -C ${TARGET_DIR}/${BINARY}-linux-amd64 -zvcf ${TARGET_PATH}-linux-amd64.tar.gz ${BINARY}
-	tar -C ${TARGET_DIR}/${BINARY}-windows-amd64 -zvcf ${TARGET_PATH}-windows-x64.tar.gz ${BINARY}
-
-	sha256sum ${TARGET_PATH}-macos.tar.gz >> ${TARGET_PATH}-macos-sha256sum.txt
-	sha256sum ${TARGET_PATH}-linux-amd64.tar.gz >> ${TARGET_PATH}-linux-sha256sum.txt
-	sha256sum ${TARGET_PATH}-windows-x64.tar.gz >> ${TARGET_PATH}-windows-sha256sum.txt
-
-clean:
-	rm -rf ${TARGET_DIR}
+help: ## Display this help screen
+	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
