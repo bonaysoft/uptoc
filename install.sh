@@ -11,10 +11,10 @@ echo "${BLUE}Uptoc binary installer ${version}${NC}"
 unameOut="$(uname -s)"
 
 case "${unameOut}" in
-    Darwin*)    arch=macos
+    Darwin*)    arch=macos-amd64
     			bin_dir="/usr/local/bin"
     			;;
-    *)          arch=amd64
+    *)          arch=linux-amd64
     			bin_dir="${HOME}/bin"
     			;;
 esac

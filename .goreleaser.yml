@@ -17,8 +17,8 @@ builds:
     goos:
       - linux
       - darwin
+      - windows
     goarch:
-      - 386
       - amd64
     ignore:
       - goos: darwin
@@ -27,18 +27,13 @@ builds:
 archives:
   - name_template: "{{ .ProjectName }}-{{ .Os }}-{{ .Arch }}"
     replacements:
-      darwin: macOS
-    wrap_in_directory: true
+      darwin: macos
     format: tar.gz
     format_overrides:  # archive as zip on Windows
       - goos: windows
         format: zip
     files:
-      - LICENCE*
-      - LICENSE*
-      - README*
-      - CHANGELOG*
-      - docs/*
+      - none*
 checksum:
   name_template: 'checksums.txt'
 snapshot:
