@@ -25,6 +25,8 @@ curl -sSf http://uptoc.saltbo.cn/install.sh | sh
 ```
 
 ## Usage
+
+### Basic
 ```bash
 uptoc --endpoint oss-cn-beijing.aliyuncs.com --access_key LTAI4FxxxxxxxBXmS3 --access_secret Vt1FZgxxxxxxxxxxxxKp380AI --bucket demo-bucket /opt/blog/public
 ```
@@ -37,7 +39,21 @@ export UPTOC_UPLOADER_KEYSECRET=Vt1FZgxxxxxxxxxxxxKp380AI
 uptoc --endpoint oss-cn-beijing.aliyuncs.com --bucket blog-bucket /opt/blog/public
 ```
 
-So you can use it like this for the travis
+### Github Actions
+```yml
+steps:
+  - name: Deploy
+    uses: saltbo/uptoc@master
+    with:
+      driver: oss
+      endpoint: oss-cn-zhangjiakou.aliyuncs.com
+      bucket: saltbo-blog
+      dist: public
+    env:
+      UPTOC_UPLOADER_KEYID: ${{ secrets.UPTOC_UPLOADER_KEYID }}
+      UPTOC_UPLOADER_KEYSECRET: ${{ secrets.UPTOC_UPLOADER_KEYSECRET }}
+```
+### Similar Travis 
 ```yaml
 after_success:
   - curl -sSf http://uptoc.saltbo.cn/install.sh | sh
