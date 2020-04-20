@@ -1,0 +1,24 @@
+name: 'Uptoc Action'
+description: 'GitHub Action for Uptoc Command'
+author: 'saltbo <saltbo@foxmail.com>'
+inputs: 
+  driver:
+    description: 'specify driver for the cloud platform'
+    required: true
+  endpoint:
+    description: 'specify endpoint of the cloud platform'
+    required: true
+  bucket:
+    description: 'specify bucket name of the cloud platform'
+    required: true
+  dist:
+    description: 'dist'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.driver }}
+    - ${{ inputs.endpoint }}
+    - ${{ inputs.bucket }}
+    - ${{ inputs.dist }}
