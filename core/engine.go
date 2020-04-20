@@ -12,6 +12,7 @@ import (
 	"uptoc/uploader"
 )
 
+// The core engine
 type Engine struct {
 	uploader uploader.Driver
 
@@ -19,6 +20,7 @@ type Engine struct {
 	tobeDeletedObjects  []uploader.Object
 }
 
+// Init the engine
 func NewEngine(uploadDriver uploader.Driver) *Engine {
 	return &Engine{
 		uploader: uploadDriver,
@@ -28,6 +30,7 @@ func NewEngine(uploadDriver uploader.Driver) *Engine {
 	}
 }
 
+// Load local files and compare with the remote objects
 func (e *Engine) LoadAndCompareObjects(localDir string) error {
 	localObjects, err := loadLocalObjects(localDir)
 	if err != nil {
@@ -66,6 +69,8 @@ func (e *Engine) LoadAndCompareObjects(localDir string) error {
 	return nil
 }
 
+// Upload the to be upload objects to the cloud
+// and delete the not exist remote objects
 func (e *Engine) Sync() error {
 	log.Printf("found %d files to be uploaded, uploading...", len(e.tobeUploadedObjects))
 	for _, obj := range e.tobeUploadedObjects {

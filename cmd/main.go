@@ -14,11 +14,11 @@ import (
 )
 
 const (
-	// uploader configs from os envs
+	// Uploader configs from os envs
 	EnvUploaderAccessKey    = "UPLOADER_ACCESS_KEY"
 	EnvUploaderAccessSecret = "UPLOADER_ACCESS_SECRET"
 
-	// config from cmd flags
+	// Config from cmd flags
 	UploaderDriver       = "driver"
 	UploaderEndpoint     = "endpoint"
 	UploaderAccessKey    = "access_key"

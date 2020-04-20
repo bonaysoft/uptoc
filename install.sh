@@ -3,7 +3,6 @@ version="1.1"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 BLUE='\033[1;34m'
-YELLOW='\033[1;33m'
 DARK='\033[1;30m'
 NC='\033[0m'
 
@@ -26,15 +25,15 @@ echo "Location:      [${url}]"
 echo "Directory:     [${bin_dir}]"
 echo "${NC}"
 
-test ! -d ${bin_dir} && mkdir ${bin_dir}
-curl -J -L ${url} | tar xz -C ${bin_dir}
+test ! -d "${bin_dir}" && mkdir "${bin_dir}"
+curl -J -L "${url}" | tar xz -C "${bin_dir}"
 
 if [ $? -eq 0 ]
 then
   echo "${GREEN}"
   echo "Installation completed successfully."
   echo "$ uptoc --version"
-  ${bin_dir}/uptoc --version
+  "${bin_dir}"/uptoc --version
 else
   echo "${RED}"
   echo "Failed installing uptoc"
