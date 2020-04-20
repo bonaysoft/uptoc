@@ -44,10 +44,10 @@ func (e *Engine) LoadAndCompareObjects(localDir string) error {
 	log.Printf("compare the local files and the remote objects...")
 	for _, localObject := range localObjects {
 		if !objectExist(localObject, remoteObjects) {
-			localObject.Type = uploader.TYPE_ADDED
+			localObject.Type = uploader.LocalObjectTypeAdded
 			e.tobeUploadedObjects = append(e.tobeUploadedObjects, localObject) // the added objects
 		} else if objectNotMatch(localObject, remoteObjects) {
-			localObject.Type = uploader.TYPE_CHANGED
+			localObject.Type = uploader.LocalObjectTypeChanged
 			e.tobeUploadedObjects = append(e.tobeUploadedObjects, localObject) // the changed objects
 		}
 

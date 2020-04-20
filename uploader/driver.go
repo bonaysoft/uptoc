@@ -3,8 +3,8 @@ package uploader
 import "fmt"
 
 const (
-	TYPE_ADDED   = "added"
-	TYPE_CHANGED = "changed"
+	LocalObjectTypeAdded   = "added"
+	LocalObjectTypeChanged = "changed"
 )
 
 type Object struct {
