@@ -3,7 +3,6 @@ package core
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -68,10 +67,6 @@ func (e *Engine) LoadAndCompareObjects(localDir string) error {
 }
 
 func (e *Engine) Sync() error {
-	if e.uploader == nil {
-		return fmt.Errorf("empty uploader")
-	}
-
 	log.Printf("found %d files to be uploaded, uploading...", len(e.tobeUploadedObjects))
 	for _, obj := range e.tobeUploadedObjects {
 		log.Printf("[%s] %s", obj.Type, obj.FilePath)
