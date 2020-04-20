@@ -15,15 +15,15 @@ import (
 
 const (
 	// uploader configs from os envs
-	UPTOC_UPLOADER_KEYID     = "UPTOC_UPLOADER_KEYID"
-	UPTOC_UPLOADER_KEYSECRET = "UPTOC_UPLOADER_KEYSECRET"
+	EnvUploaderAccessKey    = "UPLOADER_ACCESS_KEY"
+	EnvUploaderAccessSecret = "UPLOADER_ACCESS_SECRET"
 
 	// config from cmd flags
-	UPTOC_DRIVER    = "driver"
-	UPTOC_ENDPOINT  = "endpoint"
-	UPTOC_KEYID     = "access_key"
-	UPTOC_KEYSECRET = "access_secret"
-	UPTOC_BUCKET    = "bucket"
+	UploaderDriver       = "driver"
+	UploaderEndpoint     = "endpoint"
+	UploaderAccessKey    = "access_key"
+	UploaderAccessSecret = "access_secret"
+	UploaderBucket       = "bucket"
 )
 
 var (
@@ -36,29 +36,29 @@ var (
 
 	flags = []cli.Flag{
 		cli.StringFlag{
-			Name:  UPTOC_DRIVER,
+			Name:  UploaderDriver,
 			Usage: "specify cloud storage engine",
 			Value: "oss",
 		},
 		cli.StringFlag{
-			Name:     UPTOC_ENDPOINT,
+			Name:     UploaderEndpoint,
 			Usage:    "specify endpoint of the cloud platform",
 			Required: true,
 		},
 		cli.StringFlag{
-			Name:     UPTOC_KEYID,
+			Name:     UploaderAccessKey,
 			Usage:    "specify key id of the cloud platform",
-			EnvVar:   UPTOC_UPLOADER_KEYID,
+			EnvVar:   EnvUploaderAccessKey,
 			Required: true,
 		},
 		cli.StringFlag{
-			Name:     UPTOC_KEYSECRET,
+			Name:     UploaderAccessSecret,
 			Usage:    "specify key secret of the cloud platform",
-			EnvVar:   UPTOC_UPLOADER_KEYSECRET,
+			EnvVar:   EnvUploaderAccessSecret,
 			Required: true,
 		},
 		cli.StringFlag{
-			Name:     UPTOC_BUCKET,
+			Name:     UploaderBucket,
 			Usage:    "specify bucket name of the cloud platform",
 			Required: true,
 		},
@@ -80,12 +80,12 @@ func main() {
 }
 
 func action(c *cli.Context) {
-	driver := c.String(UPTOC_DRIVER)
-	endpoint := c.String(UPTOC_ENDPOINT)
-	keyId := c.String(UPTOC_KEYID)
-	keySecret := c.String(UPTOC_KEYSECRET)
-	bucketName := c.String(UPTOC_BUCKET)
-	uploadDriver, err := uploader.New(driver, endpoint, keyId, keySecret, bucketName)
+	driver := c.String(UploaderDriver)
+	endpoint := c.String(UploaderEndpoint)
+	accessKey := c.String(UploaderAccessKey)
+	accessSecret := c.String(UploaderAccessSecret)
+	bucketName := c.String(UploaderBucket)
+	uploadDriver, err := uploader.New(driver, endpoint, accessKey, accessSecret, bucketName)
 	if err != nil {
 		log.Fatalln(err)
 	}
