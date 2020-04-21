@@ -11,7 +11,7 @@ type OSSUploader struct {
 	bucket *oss.Bucket
 }
 
-// OSSUploader Constructor
+// AliOSSUploader returns a new oss uploader
 func AliOSSUploader(endpoint, accessKeyID, accessKeySecret, bucketName string) (Driver, error) {
 	ossCli, err := oss.New(endpoint, accessKeyID, accessKeySecret)
 	if err != nil {
@@ -28,7 +28,7 @@ func AliOSSUploader(endpoint, accessKeyID, accessKeySecret, bucketName string) (
 	}, nil
 }
 
-// List the remote objects
+// ListObjects returns some remote objects
 func (u *OSSUploader) ListObjects() ([]Object, error) {
 	objectsResult, err := u.bucket.ListObjects()
 	if err != nil {
@@ -43,12 +43,12 @@ func (u *OSSUploader) ListObjects() ([]Object, error) {
 	return objects, nil
 }
 
-// Upload the local file to the object
+// Upload uploads the local file to the object
 func (u *OSSUploader) Upload(objectKey, filePath string) error {
 	return u.bucket.PutObjectFromFile(objectKey, filePath)
 }
 
-// Delete the object
+// Delete deletes the object
 func (u *OSSUploader) Delete(object string) error {
 	return u.bucket.DeleteObject(object)
 }
