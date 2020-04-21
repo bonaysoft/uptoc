@@ -1,7 +1,8 @@
 .PHONY: all dep lint vet test test-coverage build clean
 
 # custom define
-CLIENT := cmd/main.go
+PROJECT := uptoc
+MAINFILE := cmd/main.go
 
 all: build
 
@@ -20,10 +21,10 @@ coverage-html: ## show coverage by the html
 	go tool cover -html=.coverprofile
 
 build: dep ## Build the binary file
-	@go build -o build/bin/client $(CLIENT)
+	@go build -o build/bin/$(PROJECT) $(MAINFILE)
 
 clean: ## Remove previous build
-	@rm -f ./build
+	@rm -rf ./build
 
 help: ## Display this help screen
 	@grep -h -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

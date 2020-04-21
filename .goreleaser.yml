@@ -17,12 +17,8 @@ builds:
     goos:
       - linux
       - darwin
-      - windows
     goarch:
       - amd64
-    ignore:
-      - goos: darwin
-        goarch: 386
 
 archives:
   - name_template: "{{ .ProjectName }}-{{ .Os }}-{{ .Arch }}"

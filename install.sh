@@ -10,13 +10,14 @@ echo "${BLUE}Uptoc binary installer ${version}${NC}"
 unameOut="$(uname -s)"
 
 case "${unameOut}" in
-    Darwin*)    arch=macos-amd64
-    			bin_dir="/usr/local/bin"
-    			;;
-    *)          arch=linux-amd64
-    			bin_dir="${HOME}/bin"
-    			;;
+Darwin*)
+  arch=macos-amd64
+  ;;
+*)
+  arch=linux-amd64
+  ;;
 esac
+bin_dir="/usr/local/bin"
 url=$(curl -s https://api.github.com/repos/saltbo/uptoc/releases/latest | grep "browser_download_url.*${arch}.tar.gz\"" | cut -d : -f 2,3 | tr -d '\"[:space:]')
 
 echo "${DARK}"
@@ -28,8 +29,7 @@ echo "${NC}"
 test ! -d "${bin_dir}" && mkdir "${bin_dir}"
 curl -J -L "${url}" | tar xz -C "${bin_dir}"
 
-if [ $? -eq 0 ]
-then
+if [ $? -eq 0 ]; then
   echo "${GREEN}"
   echo "Installation completed successfully."
   echo "$ uptoc --version"
