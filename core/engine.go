@@ -12,7 +12,7 @@ import (
 	"uptoc/uploader"
 )
 
-// Engine
+// Engine is the core to finish the logic
 type Engine struct {
 	uploader uploader.Driver
 

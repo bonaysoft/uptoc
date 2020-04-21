@@ -5,10 +5,10 @@ import (
 )
 
 const (
-	// Local added file's tag
+	// LocalObjectTypeAdded tags the local added file's tag
 	LocalObjectTypeAdded = "added"
 
-	// Local changed file's tag
+	// LocalObjectTypeAdded tags the local changed file's tag
 	LocalObjectTypeChanged = "changed"
 )
 

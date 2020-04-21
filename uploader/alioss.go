@@ -6,7 +6,7 @@ import (
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 )
 
-// OSSUploader
+// OSSUploader implements the Driver base on ali's oss.
 type OSSUploader struct {
 	bucket *oss.Bucket
 }
