@@ -9,13 +9,13 @@
 `uptoc` is a cli tool for deploying files to the cloud storage.
 
 ## Run environment
-  - Mac
-  - Linux
-  - Windows
+- Mac
+- Linux
+- Windows
 
 ## Dependent libraries 
-  - cli (github.com/urfave/cli) 
-  - oss (github.com/aliyun/aliyun-oss-go-sdk/oss)
+- cli (github.com/urfave/cli) 
+- oss (github.com/aliyun/aliyun-oss-go-sdk/oss)
 
 ## Install
 
@@ -62,10 +62,10 @@ after_success:
 ```
 
 ## Contact us
-  - [Author Blog](https://saltbo.cn).
+- [Author Blog](https://saltbo.cn).
 
 ## Author
-  - [Saltbo](https://github.com/saltbo)
+- [Saltbo](https://github.com/saltbo)
 
 ## License
-  - [MIT](https://github.com/saltbo/uptoc/blob/master/LICENSE)
+- [MIT](https://github.com/saltbo/uptoc/blob/master/LICENSE)

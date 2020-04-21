@@ -8,7 +8,7 @@ const (
 	// LocalObjectTypeAdded tags the local added file's tag
 	LocalObjectTypeAdded = "added"
 
-	// LocalObjectTypeAdded tags the local changed file's tag
+	// LocalObjectTypeChanged tags the local changed file's tag
 	LocalObjectTypeChanged = "changed"
 )
 
