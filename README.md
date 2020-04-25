@@ -13,9 +13,10 @@
 - Linux
 - Windows
 
-## Dependent libraries 
-- cli (github.com/urfave/cli) 
+## Support Driver 
 - oss (github.com/aliyun/aliyun-oss-go-sdk/oss)
+- cos (github.com/tencentyun/cos-go-sdk-v5)
+- qiniu (github.com/qiniu/api.v7)
 
 ## Install
 
@@ -60,6 +61,14 @@ after_success:
   - curl -sSf http://uptoc.saltbo.cn/install.sh | sh
   - uptoc --endpoint uploader-cn-zhangjiakou.aliyuncs.com --bucket blog-bucket public
 ```
+
+## Args Examples
+| driver | bucket | endpoint | endpoint enum |
+| -----  | --------- | ------ | ---- |
+| oss    | ut-uptoc  | oss-cn-hangzhou.aliyuncs.com | [Regions and endpoints](https://help.aliyun.com/document_detail/31837.html?spm=a2c4g.11186623.2.12.5fdb25b7xyEcuF#concept-zt4-cvy-5db)  |
+| qiniu  | ut-uptoc  | huadong |  huadong,huabei,huanan,beimei,xinjiapo  |
+| cos    | ut-uptoc-1255970412 | ap-shanghai  |  [Regions and endpoints](https://cloud.tencent.com/document/product/436/6224)  |
+
 
 ## Contact us
 - [Author Blog](https://saltbo.cn).
