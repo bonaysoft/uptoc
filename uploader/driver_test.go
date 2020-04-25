@@ -17,7 +17,7 @@ var driverConfigs = map[string]map[string]string{
 	"qiniu": {
 		"endpoint":      "huadong",
 		"access_key":    os.Getenv("UPLOADER_QINIU_AK"),
-		"access_secret": os.Getenv("UPLOADER_QINIU_AK"),
+		"access_secret": os.Getenv("UPLOADER_QINIU_SK"),
 	},
 }
 
@@ -34,8 +34,7 @@ func TestUploader(t *testing.T) {
 	}
 
 	// test the all drivers
-	for driver := range supportDrivers {
-		config := driverConfigs[driver]
+	for driver, config := range driverConfigs {
 		uploader, err := New(driver, config["endpoint"], config["access_key"], config["access_secret"], "ut-uptoc")
 		assert.NoError(t, err)
 
