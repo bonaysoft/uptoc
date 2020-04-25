@@ -35,6 +35,7 @@ var supportDrivers = map[string]Constructor{
 	"oss":   NewOSSUploader,
 	"cos":   NewCOSUploader,
 	"qiniu": NewQiniuUploader,
+	"s3":    NewS3Uploader,
 }
 
 // New is a instantiation function to find and init a upload driver.

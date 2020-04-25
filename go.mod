@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/aliyun/aliyun-oss-go-sdk v2.0.3+incompatible
+	github.com/aws/aws-sdk-go v1.30.14
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
 	github.com/qiniu/api.v7 v7.2.5+incompatible
 	github.com/qiniu/x v7.0.8+incompatible // indirect

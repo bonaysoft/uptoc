@@ -17,6 +17,7 @@
 - oss (github.com/aliyun/aliyun-oss-go-sdk/oss)
 - cos (github.com/tencentyun/cos-go-sdk-v5)
 - qiniu (github.com/qiniu/api.v7)
+- s3 (github.com/aws/aws-sdk-go/service/s3)
 
 ## Install
 
@@ -68,6 +69,7 @@ after_success:
 | oss    | ut-uptoc  | oss-cn-hangzhou.aliyuncs.com | [Regions and endpoints](https://help.aliyun.com/document_detail/31837.html?spm=a2c4g.11186623.2.12.5fdb25b7xyEcuF#concept-zt4-cvy-5db)  |
 | qiniu  | ut-uptoc  | huadong |  huadong,huabei,huanan,beimei,xinjiapo  |
 | cos    | ut-uptoc-1255970412 | ap-shanghai  |  [Regions and endpoints](https://cloud.tencent.com/document/product/436/6224)  |
+| s3     | ut-uptoc | ap-northeast-1  |  [Regions and endpoints](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints)  |
 
 
 ## Contact us

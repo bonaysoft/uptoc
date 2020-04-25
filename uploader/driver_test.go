@@ -27,6 +27,12 @@ var driverConfigs = map[string]map[string]string{
 		"access_key":    os.Getenv("UPLOADER_QINIU_AK"),
 		"access_secret": os.Getenv("UPLOADER_QINIU_SK"),
 	},
+	"s3": {
+		"bucket":        "ut-uptoc",
+		"endpoint":      "ap-northeast-1",
+		"access_key":    os.Getenv("UPLOADER_S3_AK"),
+		"access_secret": os.Getenv("UPLOADER_S3_SK"),
+	},
 }
 
 func TestUploader(t *testing.T) {
