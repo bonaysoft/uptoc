@@ -1,7 +1,11 @@
 name: 'Uptoc Action'
-description: 'GitHub Action for Uptoc Command'
+description: 'Publish your static files, support oss,cos,qiniu,upaiyun'
 author: 'saltbo <saltbo@foxmail.com>'
-inputs: 
+branding:
+  color: 'blue'
+  icon: 'arrow-up-circle'
+
+inputs:
   driver:
     description: 'specify driver for the cloud platform'
     required: true
@@ -14,6 +18,7 @@ inputs:
   dist:
     description: 'dist'
     required: true
+
 runs:
   using: 'docker'
   image: 'Dockerfile'
