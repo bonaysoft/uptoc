@@ -19,6 +19,8 @@ jobs:
       - name: Run Unit tests.
         run: make test
         env:
+          UPLOADER_COS_AK: ${{ secrets.UPLOADER_COS_AK }}
+          UPLOADER_COS_SK: ${{ secrets.UPLOADER_COS_SK }}
           UPLOADER_OSS_AK: ${{ secrets.UPLOADER_OSS_AK }}
           UPLOADER_OSS_SK: ${{ secrets.UPLOADER_OSS_SK }}
           UPLOADER_QINIU_AK: ${{ secrets.UPLOADER_QINIU_AK }}

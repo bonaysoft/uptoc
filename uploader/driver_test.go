@@ -9,12 +9,20 @@ import (
 )
 
 var driverConfigs = map[string]map[string]string{
+	"cos": {
+		"bucket":        "ut-uptoc-1255970412",
+		"endpoint":      "ap-shanghai",
+		"access_key":    os.Getenv("UPLOADER_COS_AK"),
+		"access_secret": os.Getenv("UPLOADER_COS_SK"),
+	},
 	"oss": {
+		"bucket":        "ut-uptoc",
 		"endpoint":      "oss-cn-hangzhou.aliyuncs.com",
 		"access_key":    os.Getenv("UPLOADER_OSS_AK"),
 		"access_secret": os.Getenv("UPLOADER_OSS_SK"),
 	},
 	"qiniu": {
+		"bucket":        "ut-uptoc",
 		"endpoint":      "huadong",
 		"access_key":    os.Getenv("UPLOADER_QINIU_AK"),
 		"access_secret": os.Getenv("UPLOADER_QINIU_SK"),
@@ -35,7 +43,7 @@ func TestUploader(t *testing.T) {
 
 	// test the all drivers
 	for driver, config := range driverConfigs {
-		uploader, err := New(driver, config["endpoint"], config["access_key"], config["access_secret"], "ut-uptoc")
+		uploader, err := New(driver, config["endpoint"], config["access_key"], config["access_secret"], config["bucket"])
 		assert.NoError(t, err)
 
 		// test object upload
