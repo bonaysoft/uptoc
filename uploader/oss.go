@@ -11,8 +11,8 @@ type OSSUploader struct {
 	bucket *oss.Bucket
 }
 
-// AliOSSUploader returns a new oss uploader
-func AliOSSUploader(endpoint, accessKeyID, accessKeySecret, bucketName string) (Driver, error) {
+// NewOSSUploader returns a new oss uploader
+func NewOSSUploader(endpoint, accessKeyID, accessKeySecret, bucketName string) (Driver, error) {
 	ossCli, err := oss.New(endpoint, accessKeyID, accessKeySecret)
 	if err != nil {
 		return nil, err

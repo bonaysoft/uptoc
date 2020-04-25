@@ -16,13 +16,15 @@ var zones = map[string]storage.Zone{
 	"xinjiapo": storage.ZoneXinjiapo,
 }
 
+// Qiniu implements the Driver base on qiuniu.
 type Qiniu struct {
 	mac        *qbox.Mac
 	cfg        *storage.Config
 	bucketName string
 }
 
-func QiniuUploader(endpoint, accessKey, accessSecret, bucketName string) (Driver, error) {
+// NewQiniuUploader returns a new Qiniu uploader
+func NewQiniuUploader(endpoint, accessKey, accessSecret, bucketName string) (Driver, error) {
 	zone, ok := zones[endpoint]
 	if !ok {
 		return nil, fmt.Errorf("endpoint %s not support", endpoint)
@@ -37,6 +39,7 @@ func QiniuUploader(endpoint, accessKey, accessSecret, bucketName string) (Driver
 	}, nil
 }
 
+// ListObjects returns some remote objects
 func (u *Qiniu) ListObjects() ([]Object, error) {
 	limit := 1000
 	prefix := ""
@@ -69,6 +72,7 @@ func (u *Qiniu) ListObjects() ([]Object, error) {
 	return objects, nil
 }
 
+// Upload uploads the local file to the object
 func (u *Qiniu) Upload(object, rawPath string) error {
 	putPolicy := storage.PutPolicy{
 		Scope: u.bucketName,
@@ -78,6 +82,7 @@ func (u *Qiniu) Upload(object, rawPath string) error {
 	return storage.NewFormUploader(u.cfg).PutFile(ctx, &storage.PutRet{}, upToken, object, rawPath, nil)
 }
 
+// Delete deletes the object
 func (u *Qiniu) Delete(object string) error {
 	return storage.NewBucketManager(u.mac, u.cfg).Delete(u.bucketName, object)
 }

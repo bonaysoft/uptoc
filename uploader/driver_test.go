@@ -31,12 +31,13 @@ var driverConfigs = map[string]map[string]string{
 
 func TestUploader(t *testing.T) {
 	tmp := "/tmp/uptoc/"
+	assert.NoError(t, os.RemoveAll(tmp))
+	assert.NoError(t, os.Mkdir(tmp, os.FileMode(0755)))
 	files := map[string]string{
 		"abc1.txt": "abcabcabc",
 		"abc2.txt": "112233",
 		"abc3.txt": "445566",
 	}
-	assert.NoError(t, os.Mkdir(tmp, os.FileMode(0755)))
 	for name, content := range files {
 		assert.NoError(t, ioutil.WriteFile(tmp+name, []byte(content), os.FileMode(0644)))
 	}
@@ -61,9 +62,6 @@ func TestUploader(t *testing.T) {
 			assert.NoError(t, uploader.Delete(object))
 		}
 	}
-
-	// clean the test files.
-	assert.NoError(t, os.RemoveAll(tmp))
 }
 
 func TestNotSupportDriver(t *testing.T) {
