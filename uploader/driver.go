@@ -32,10 +32,11 @@ type Driver interface {
 type Constructor func(endpoint, accessKeyID, accessKeySecret, bucketName string) (Driver, error)
 
 var supportDrivers = map[string]Constructor{
-	"oss":   NewOSSUploader,
-	"cos":   NewCOSUploader,
-	"qiniu": NewQiniuUploader,
-	"s3":    NewS3Uploader,
+	"oss":    NewOSSUploader,
+	"cos":    NewCOSUploader,
+	"qiniu":  NewQiniuUploader,
+	"s3":     NewS3Uploader,
+	"google": NewGoogleUploader,
 }
 
 // New is a instantiation function to find and init a upload driver.

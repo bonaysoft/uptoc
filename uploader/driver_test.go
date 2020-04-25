@@ -2,6 +2,7 @@ package uploader
 
 import (
 	"io/ioutil"
+	"log"
 	"os"
 	"testing"
 
@@ -33,6 +34,12 @@ var driverConfigs = map[string]map[string]string{
 		"access_key":    os.Getenv("UPLOADER_S3_AK"),
 		"access_secret": os.Getenv("UPLOADER_S3_SK"),
 	},
+	"google": {
+		"bucket":        "ut-uptoc",
+		"endpoint":      "",
+		"access_key":    "",
+		"access_secret": os.Getenv("UPLOADER_GOOGLE_SK"),
+	},
 }
 
 func TestUploader(t *testing.T) {
@@ -50,6 +57,7 @@ func TestUploader(t *testing.T) {
 
 	// test the all drivers
 	for driver, config := range driverConfigs {
+		log.Printf("===== driver: %s =====", driver)
 		uploader, err := New(driver, config["endpoint"], config["access_key"], config["access_secret"], config["bucket"])
 		assert.NoError(t, err)
 

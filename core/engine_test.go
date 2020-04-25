@@ -15,8 +15,8 @@ type mockUploader struct {
 
 func (m mockUploader) ListObjects() ([]uploader.Object, error) {
 	return []uploader.Object{
-		{Key: "/abc1.txt", ETag: "abc123"},
-		{Key: "/abc4.txt", ETag: "aaa123"},
+		{Key: "abc1.txt", ETag: "abc123"},
+		{Key: "abc4.txt", ETag: "aaa123"},
 	}, nil
 }
 
@@ -30,7 +30,7 @@ func (m mockUploader) Delete(object string) error {
 
 func TestEngine(t *testing.T) {
 	// init test data
-	tmp := "/tmp/uptoc/mock"
+	tmp := "/tmp/uptoc/mock/"
 	assert.NoError(t, os.RemoveAll(tmp))
 	assert.NoError(t, os.Mkdir(tmp, os.FileMode(0755)))
 	files := map[string]string{
@@ -44,6 +44,6 @@ func TestEngine(t *testing.T) {
 
 	// test
 	e := NewEngine(&mockUploader{})
-	assert.NoError(t, e.LoadAndCompareObjects("/tmp/uptoc"))
+	assert.NoError(t, e.LoadAndCompareObjects(tmp))
 	assert.NoError(t, e.Sync())
 }

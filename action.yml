@@ -1,5 +1,5 @@
 name: 'Uptoc Action'
-description: 'Publish your static files, support oss,cos,qiniu,s3'
+description: 'Publish your static files, support oss,cos,qiniu,aws s3,google storage'
 author: 'saltbo <saltbo@foxmail.com>'
 branding:
   color: 'blue'
