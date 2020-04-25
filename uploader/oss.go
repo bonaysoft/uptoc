@@ -30,14 +30,22 @@ func AliOSSUploader(endpoint, accessKeyID, accessKeySecret, bucketName string) (
 
 // ListObjects returns some remote objects
 func (u *OSSUploader) ListObjects() ([]Object, error) {
-	objectsResult, err := u.bucket.ListObjects()
-	if err != nil {
-		return nil, err
-	}
+	marker := ""
+	objects := make([]Object, 0)
+	for {
+		objectsResult, err := u.bucket.ListObjects(oss.Marker(marker))
+		if err != nil {
+			return nil, err
+		}
+		for _, obj := range objectsResult.Objects {
+			objects = append(objects, Object{Key: obj.Key, ETag: strings.ToLower(strings.Trim(obj.ETag, `"`))})
+		}
 
-	objects := make([]Object, 0, len(objectsResult.Objects))
-	for _, obj := range objectsResult.Objects {
-		objects = append(objects, Object{Key: obj.Key, ETag: strings.ToLower(strings.Trim(obj.ETag, `"`))})
+		if objectsResult.IsTruncated {
+			marker = objectsResult.NextMarker
+		} else {
+			break
+		}
 	}
 
 	return objects, nil

@@ -23,6 +23,11 @@ jobs:
         with:
           token: ${{secrets.CODECOV_TOKEN}}
           file: .coverprofile
+        env:
+          UPLOADER_OSS_AK: ${{ secrets.UPLOADER_OSS_AK }}
+          UPLOADER_OSS_SK: ${{ secrets.UPLOADER_OSS_SK }}
+          UPLOADER_QINIU_AK: ${{ secrets.UPLOADER_QINIU_AK }}
+          UPLOADER_QINIU_SK: ${{ secrets.UPLOADER_QINIU_SK }}
   build:
     name: Build
     runs-on: ubuntu-latest
