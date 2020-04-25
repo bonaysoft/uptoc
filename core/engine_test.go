@@ -30,7 +30,7 @@ func (m mockUploader) Delete(object string) error {
 
 func TestEngine(t *testing.T) {
 	// init test data
-	tmp := "/tmp/uptoc/mock/"
+	tmp := "/tmp/uptoc-engine-ut/"
 	assert.NoError(t, os.RemoveAll(tmp))
 	assert.NoError(t, os.Mkdir(tmp, os.FileMode(0755)))
 	files := map[string]string{

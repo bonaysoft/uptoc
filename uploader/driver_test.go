@@ -43,7 +43,7 @@ var driverConfigs = map[string]map[string]string{
 }
 
 func TestUploader(t *testing.T) {
-	tmp := "/tmp/uptoc/"
+	tmp := "/tmp/uptoc-driver-ut/"
 	assert.NoError(t, os.RemoveAll(tmp))
 	assert.NoError(t, os.Mkdir(tmp, os.FileMode(0755)))
 	files := map[string]string{
