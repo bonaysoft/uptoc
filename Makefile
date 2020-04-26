@@ -4,6 +4,14 @@
 PROJECT := uptoc
 MAINFILE := cmd/main.go
 
+Version := $(shell git describe)
+Commit := $(shell git rev-parse HEAD)
+Repo := $(shell git remote get-url origin)
+
+$(info    Version:$(Version))
+$(info    Commit:$(Commit))
+$(info    Repo:$(Repo))
+
 all: build
 
 dep: ## Get the dependencies
@@ -21,7 +29,7 @@ coverage-html: ## show coverage by the html
 	go tool cover -html=.coverprofile
 
 build: dep ## Build the binary file
-	@go build -o build/bin/$(PROJECT) $(MAINFILE)
+	@go build -o build/bin/$(PROJECT) -ldflags "-X main.release=$(Version) -X main.commit=$(Commit) -X main.repo=$(Repo)" $(MAINFILE)
 
 clean: ## Remove previous build
 	@rm -rf ./build
