@@ -22,8 +22,8 @@ const (
 	uploaderFlagBucket       = "bucket"
 
 	// uploader environments
-	uploaderEnvAccessKey    = "uploaderFlag_ACCESS_KEY"
-	uploaderEnvAccessSecret = "uploaderFlag_ACCESS_SECRET"
+	uploaderEnvAccessKey    = "UPTOC_UPLOADER_AK"
+	uploaderEnvAccessSecret = "UPTOC_UPLOADER_SK"
 )
 
 var (
