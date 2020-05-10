@@ -37,8 +37,8 @@ uptoc --endpoint oss-cn-beijing.aliyuncs.com --access_key LTAI4FxxxxxxxBXmS3 --a
 
 And the access-key and access-secret support settings by the system environment
 ```bash
-export UPTOC_UPLOADER_KEYID=LTAI4FxxxxxxxBXmS3
-export UPTOC_UPLOADER_KEYSECRET=Vt1FZgxxxxxxxxxxxxKp380AI
+export UPTOC_UPLOADER_AK=LTAI4FxxxxxxxBXmS3
+export UPTOC_UPLOADER_SK=Vt1FZgxxxxxxxxxxxxKp380AI
 
 uptoc --endpoint oss-cn-beijing.aliyuncs.com --bucket blog-bucket /opt/blog/public
 ```
@@ -54,8 +54,8 @@ steps:
       bucket: saltbo-blog
       dist: public
     env:
-      UPTOC_UPLOADER_KEYID: ${{ secrets.UPTOC_UPLOADER_KEYID }}
-      UPTOC_UPLOADER_KEYSECRET: ${{ secrets.UPTOC_UPLOADER_KEYSECRET }}
+      UPTOC_UPLOADER_AK: ${{ secrets.UPTOC_UPLOADER_KEYID }}
+      UPTOC_UPLOADER_SK: ${{ secrets.UPTOC_UPLOADER_KEYSECRET }}
 ```
 ### Similar Travis 
 ```yaml
