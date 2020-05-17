@@ -4,6 +4,8 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"io"
+	"io/ioutil"
+	"net/http"
 	"os"
 )
 
@@ -21,4 +23,14 @@ func FileMD5(filepath string) string {
 	}
 
 	return hex.EncodeToString(md5hash.Sum(nil)[:])
+}
+
+// FileContentType returns the file content-type
+func FileContentType(filepath string) string {
+	fileData, err := ioutil.ReadFile(filepath)
+	if err != nil {
+		return ""
+	}
+
+	return http.DetectContentType(fileData)
 }

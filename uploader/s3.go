@@ -8,6 +8,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+
+	"uptoc/utils"
 )
 
 // S3Uploader implements the Driver base on the S3 of AWS.
@@ -65,16 +67,17 @@ func (u *S3Uploader) ListObjects() ([]Object, error) {
 
 // Upload uploads the local file to the object
 func (u *S3Uploader) Upload(objectKey, filePath string) (err error) {
-	body, err := os.Open(filePath)
+	bodyReader, err := os.Open(filePath)
 	if err != nil {
 		return err
 	}
-	defer body.Close()
+	defer bodyReader.Close()
 
 	_, err = u.client.PutObject(&s3.PutObjectInput{
-		Body:   body,
-		Bucket: aws.String(u.bucket),
-		Key:    aws.String(objectKey),
+		Body:        bodyReader,
+		Bucket:      aws.String(u.bucket),
+		Key:         aws.String(objectKey),
+		ContentType: aws.String(utils.FileContentType(filePath)),
 	})
 	return
 }
