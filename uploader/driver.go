@@ -2,6 +2,7 @@ package uploader
 
 import (
 	"fmt"
+	"strings"
 )
 
 const (
@@ -28,22 +29,27 @@ type Driver interface {
 	Delete(object string) error
 }
 
-// Constructor defines the upload driver constructor used by some engine
-type Constructor func(endpoint, accessKeyID, accessKeySecret, bucketName string) (Driver, error)
-
-var supportDrivers = map[string]Constructor{
-	"oss":    NewOSSUploader,
-	"cos":    NewCOSUploader,
-	"qiniu":  NewQiniuUploader,
-	"s3":     NewS3Uploader,
-	"google": NewGoogleUploader,
+var supportDrivers = map[string]string{
+	"cos":    "cos.%s.myqcloud.com",
+	"oss":    "oss-%s.aliyuncs.com",
+	"qiniu":  "s3-%s.qiniucs.com",
+	"google": "storage.googleapis.com",
+	"aws":    "%s",
 }
 
 // New is a instantiation function to find and init a upload driver.
-func New(driver, endpoint, accessKeyID, accessKeySecret, bucketName string) (Driver, error) {
-	if constructor, ok := supportDrivers[driver]; ok {
-		return constructor(endpoint, accessKeyID, accessKeySecret, bucketName)
+func New(driver, region, accessKey, secretKey, bucketName string) (Driver, error) {
+	if _, exist := supportDrivers[driver]; !exist {
+		return nil, fmt.Errorf("driver[%s] not support", driver)
 	}
 
-	return nil, fmt.Errorf("driver[%s] not support", driver)
+	endpoint := supportDrivers[driver]
+	if strings.Contains(endpoint, "%s") {
+		endpoint = fmt.Sprintf(endpoint, region)
+	}
+	if driver == "aws" {
+		endpoint = ""
+	}
+
+	return NewS3Uploader(region, endpoint, accessKey, secretKey, bucketName)
 }

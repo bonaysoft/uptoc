@@ -17,15 +17,15 @@ type S3Uploader struct {
 }
 
 // NewS3Uploader returns a new s3 uploader
-func NewS3Uploader(endpoint, accessKeyID, accessKeySecret, bucketName string) (Driver, error) {
-	cfg := aws.NewConfig().WithCredentials(credentials.NewStaticCredentials(accessKeyID, accessKeySecret, ""))
+func NewS3Uploader(region, endpoint, accessKey, secretKey, bucketName string) (Driver, error) {
+	cfg := aws.NewConfig().WithCredentials(credentials.NewStaticCredentials(accessKey, secretKey, ""))
 	s, err := session.NewSession(cfg)
 	if err != nil {
 		return nil, err
 	}
 
 	return &S3Uploader{
-		client: s3.New(s, cfg.WithRegion(endpoint)),
+		client: s3.New(s, cfg.WithRegion(region), cfg.WithEndpoint(endpoint)),
 		bucket: bucketName,
 	}, nil
 }
@@ -45,9 +45,12 @@ func (u *S3Uploader) ListObjects() ([]Object, error) {
 		}
 
 		for _, obj := range objectsResult.Contents {
-			objects = append(objects, Object{
+			fObj := Object{
 				Key:  aws.StringValue(obj.Key),
-				ETag: strings.ToLower(strings.Trim(aws.StringValue(obj.ETag), `"`))})
+				ETag: strings.Trim(aws.StringValue(obj.ETag), `"`),
+			}
+
+			objects = append(objects, fObj)
 		}
 
 		if aws.BoolValue(objectsResult.IsTruncated) {

@@ -4,41 +4,44 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"uptoc/utils"
 )
 
 var driverConfigs = map[string]map[string]string{
 	"cos": {
 		"bucket":        "ut-uptoc-1255970412",
-		"endpoint":      "ap-shanghai",
+		"region":        "ap-shanghai",
 		"access_key":    os.Getenv("UPLOADER_COS_AK"),
 		"access_secret": os.Getenv("UPLOADER_COS_SK"),
 	},
 	"oss": {
 		"bucket":        "ut-uptoc",
-		"endpoint":      "oss-cn-hangzhou.aliyuncs.com",
+		"region":        "cn-hangzhou",
 		"access_key":    os.Getenv("UPLOADER_OSS_AK"),
 		"access_secret": os.Getenv("UPLOADER_OSS_SK"),
 	},
 	"qiniu": {
 		"bucket":        "ut-uptoc",
-		"endpoint":      "huadong",
+		"region":        "cn-east-1",
 		"access_key":    os.Getenv("UPLOADER_QINIU_AK"),
 		"access_secret": os.Getenv("UPLOADER_QINIU_SK"),
 	},
-	"s3": {
+	"aws": {
 		"bucket":        "ut-uptoc",
-		"endpoint":      "ap-northeast-1",
+		"region":        "ap-northeast-1",
 		"access_key":    os.Getenv("UPLOADER_S3_AK"),
 		"access_secret": os.Getenv("UPLOADER_S3_SK"),
 	},
 	"google": {
 		"bucket":        "ut-uptoc",
-		"endpoint":      "",
-		"access_key":    "",
-		"access_secret": os.Getenv("UPLOADER_GOOGLE_SK"),
+		"region":        "auto",
+		"access_key":    os.Getenv("UPLOADER_STORAGE_AK"),
+		"access_secret": os.Getenv("UPLOADER_STORAGE_SK"),
 	},
 }
 
@@ -58,7 +61,7 @@ func TestUploader(t *testing.T) {
 	// test the all drivers
 	for driver, config := range driverConfigs {
 		log.Printf("===== driver: %s =====", driver)
-		uploader, err := New(driver, config["endpoint"], config["access_key"], config["access_secret"], config["bucket"])
+		uploader, err := New(driver, config["region"], config["access_key"], config["access_secret"], config["bucket"])
 		assert.NoError(t, err)
 
 		// test object upload
@@ -70,6 +73,11 @@ func TestUploader(t *testing.T) {
 		objects, err := uploader.ListObjects()
 		assert.NoError(t, err)
 		assert.Equal(t, len(files), len(objects))
+
+		// test object ETag
+		for _, object := range objects {
+			assert.Equal(t, strings.ToLower(object.ETag), utils.FileMD5(tmp+object.Key))
+		}
 
 		// test object delete
 		for object := range files {

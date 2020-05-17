@@ -1,15 +1,13 @@
 package core
 
 import (
-	"crypto/md5"
-	"encoding/hex"
-	"io"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"uptoc/uploader"
+	"uptoc/utils"
 )
 
 // Engine is the core to finish the logic
@@ -92,21 +90,6 @@ func (e *Engine) Sync() error {
 	return nil
 }
 
-func fileMD5(filepath string) string {
-	f, err := os.Open(filepath)
-	if err != nil {
-		return ""
-	}
-	defer f.Close()
-
-	md5hash := md5.New()
-	if _, err := io.Copy(md5hash, f); err != nil {
-		return ""
-	}
-
-	return hex.EncodeToString(md5hash.Sum(nil)[:])
-}
-
 func objectExist(object uploader.Object, objects []uploader.Object) bool {
 	for _, obj := range objects {
 		if obj.Key == object.Key {
@@ -118,7 +101,7 @@ func objectExist(object uploader.Object, objects []uploader.Object) bool {
 
 func objectNotMatch(object uploader.Object, objects []uploader.Object) bool {
 	for _, obj := range objects {
-		if obj.Key == object.Key && obj.ETag != object.ETag {
+		if obj.Key == object.Key && strings.ToLower(obj.ETag) != object.ETag {
 			return true
 		}
 	}
@@ -134,7 +117,7 @@ func loadLocalObjects(dirPath string) ([]uploader.Object, error) {
 
 		localObjects = append(localObjects, uploader.Object{
 			Key:      strings.TrimPrefix(filePath, dirPath),
-			ETag:     fileMD5(filePath),
+			ETag:     utils.FileMD5(filePath),
 			FilePath: filePath,
 		})
 		return nil
