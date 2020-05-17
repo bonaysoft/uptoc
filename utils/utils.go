@@ -7,6 +7,7 @@ import (
 	"os"
 )
 
+// FileMD5 returns the file md5 hash hex
 func FileMD5(filepath string) string {
 	f, err := os.Open(filepath)
 	if err != nil {
