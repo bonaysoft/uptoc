@@ -14,11 +14,11 @@
 - Windows
 
 ## Support Driver 
-- oss (github.com/aliyun/aliyun-oss-go-sdk/oss)
-- cos (github.com/tencentyun/cos-go-sdk-v5)
-- qiniu (github.com/qiniu/api.v7)
-- s3 (github.com/aws/aws-sdk-go/service/s3)
-- google (cloud.google.com/go/storage)
+- Aliyun OSS
+- Tencent COS
+- Qiniu Kodo
+- Google Storage
+- AWS S3
 
 ## Install
 
