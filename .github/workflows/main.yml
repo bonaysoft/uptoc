@@ -25,9 +25,10 @@ jobs:
           UPLOADER_OSS_SK: ${{ secrets.UPLOADER_OSS_SK }}
           UPLOADER_QINIU_AK: ${{ secrets.UPLOADER_QINIU_AK }}
           UPLOADER_QINIU_SK: ${{ secrets.UPLOADER_QINIU_SK }}
+          UPLOADER_STORAGE_AK: ${{ secrets.UPLOADER_STORAGE_AK }}
+          UPLOADER_STORAGE_SK: ${{ secrets.UPLOADER_STORAGE_SK }}
           UPLOADER_S3_AK: ${{ secrets.UPLOADER_S3_AK }}
           UPLOADER_S3_SK: ${{ secrets.UPLOADER_S3_SK }}
-          UPLOADER_GOOGLE_SK: ${{ secrets.UPLOADER_GOOGLE_SK }}
       - name: Upload Coverage report to CodeCov
         uses: codecov/codecov-action@v1.0.0
         with:

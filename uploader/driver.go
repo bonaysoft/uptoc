@@ -29,6 +29,7 @@ type Driver interface {
 	Delete(object string) error
 }
 
+// driver => endpoint format template
 var supportDrivers = map[string]string{
 	"cos":    "cos.%s.myqcloud.com",
 	"oss":    "oss-%s.aliyuncs.com",

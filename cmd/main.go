@@ -16,7 +16,7 @@ import (
 const (
 	// uploader flags
 	uploaderFlagDriver       = "driver"
-	uploaderFlagEndpoint     = "endpoint"
+	uploaderFlagRegion       = "region"
 	uploaderFlagAccessKey    = "access_key"
 	uploaderFlagAccessSecret = "access_secret"
 	uploaderFlagBucket       = "bucket"
@@ -41,8 +41,8 @@ var (
 			Value: "oss",
 		},
 		cli.StringFlag{
-			Name:     uploaderFlagEndpoint,
-			Usage:    "specify endpoint of the cloud platform",
+			Name:     uploaderFlagRegion,
+			Usage:    "specify region of the cloud platform",
 			Required: true,
 		},
 		cli.StringFlag{
@@ -81,11 +81,11 @@ func main() {
 
 func action(c *cli.Context) {
 	driver := c.String(uploaderFlagDriver)
-	endpoint := c.String(uploaderFlagEndpoint)
+	region := c.String(uploaderFlagRegion)
 	accessKey := c.String(uploaderFlagAccessKey)
 	accessSecret := c.String(uploaderFlagAccessSecret)
 	bucketName := c.String(uploaderFlagBucket)
-	uploadDriver, err := uploader.New(driver, endpoint, accessKey, accessSecret, bucketName)
+	uploadDriver, err := uploader.New(driver, region, accessKey, accessSecret, bucketName)
 	if err != nil {
 		log.Fatalln(err)
 	}

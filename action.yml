@@ -9,8 +9,8 @@ inputs:
   driver:
     description: 'specify driver for the cloud platform'
     required: true
-  endpoint:
-    description: 'specify endpoint of the cloud platform'
+  region:
+    description: 'specify region of the cloud platform'
     required: true
   bucket:
     description: 'specify bucket name of the cloud platform'
@@ -24,6 +24,6 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{ inputs.driver }}
-    - ${{ inputs.endpoint }}
+    - ${{ inputs.region }}
     - ${{ inputs.bucket }}
     - ${{ inputs.dist }}
