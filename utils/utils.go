@@ -5,8 +5,10 @@ import (
 	"encoding/hex"
 	"io"
 	"io/ioutil"
+	"mime"
 	"net/http"
 	"os"
+	"path"
 )
 
 // FileMD5 returns the file md5 hash hex
@@ -27,6 +29,11 @@ func FileMD5(filepath string) string {
 
 // FileContentType returns the file content-type
 func FileContentType(filepath string) string {
+	mimeType := mime.TypeByExtension(path.Ext(filepath))
+	if mimeType != "" {
+		return mimeType
+	}
+	
 	fileData, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		return ""
