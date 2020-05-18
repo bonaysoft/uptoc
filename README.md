@@ -1,4 +1,4 @@
-# uptoc
+# Uptoc
 
 [![](https://github.com/saltbo/uptoc/workflows/build/badge.svg)](https://github.com/saltbo/uptoc/actions?query=workflow%3Abuild)
 [![](https://codecov.io/gh/saltbo/uptoc/branch/master/graph/badge.svg)](https://codecov.io/gh/saltbo/uptoc)
@@ -6,7 +6,7 @@
 [![](https://img.shields.io/github/v/release/saltbo/uptoc.svg)](https://github.com/saltbo/uptoc/releases)
 [![](https://img.shields.io/github/license/saltbo/uptoc.svg)](https://github.com/saltbo/uptoc/blob/master/LICENSE)
 
-`uptoc` is a cli tool for deploying files to the cloud storage.
+English | [🇨🇳中文](https://saltbo.cn/uptoc)
 
 ## Run environment
 - Mac
