@@ -10,6 +10,8 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
+      - name: echo-mime-types
+        run: cat /etc/mime.types
       - name: Set up Go
         uses: actions/setup-go@v1
         with:
