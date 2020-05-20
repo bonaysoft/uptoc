@@ -11,7 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: echo-mime-types
-        run: cat /etc/mime.types
+        run: cat /etc/apache/mime.types
+      - name: echo-mime-types2
+        run: cat /etc/apache2/mime.types
       - name: Set up Go
         uses: actions/setup-go@v1
         with:
