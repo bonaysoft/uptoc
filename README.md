@@ -44,6 +44,9 @@ uptoc --driver oss --region cn-beijing --bucket blog-bucket /opt/blog/public
 ```
 
 ### Github Actions
+
+See [action.yml](action.yml)
+
 ```yml
 steps:
   - name: Deploy
