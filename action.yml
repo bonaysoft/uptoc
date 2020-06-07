@@ -15,15 +15,13 @@ inputs:
   bucket:
     description: 'specify bucket name of the cloud platform'
     required: true
+  exclude:
+    description: 'specify exclude the given comma separated directories'
+    required: false
   dist:
-    description: 'dist'
+    description: 'specify dist of the local directory'
     required: true
 
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  args:
-    - ${{ inputs.driver }}
-    - ${{ inputs.region }}
-    - ${{ inputs.bucket }}
-    - ${{ inputs.dist }}

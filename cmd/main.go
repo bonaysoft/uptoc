@@ -20,6 +20,7 @@ const (
 	uploaderFlagAccessKey    = "access_key"
 	uploaderFlagAccessSecret = "access_secret"
 	uploaderFlagBucket       = "bucket"
+	uploaderFlagExclude      = "exclude"
 
 	// uploader environments
 	uploaderEnvAccessKey    = "UPTOC_UPLOADER_AK"
@@ -62,6 +63,10 @@ var (
 			Usage:    "specify bucket name of the cloud platform",
 			Required: true,
 		},
+		cli.StringFlag{
+			Name:  uploaderFlagExclude,
+			Usage: "specify exclude the given comma separated directories (example: --exclude=.cache,test)",
+		},
 	}
 )
 
@@ -85,18 +90,15 @@ func action(c *cli.Context) {
 	accessKey := c.String(uploaderFlagAccessKey)
 	accessSecret := c.String(uploaderFlagAccessSecret)
 	bucketName := c.String(uploaderFlagBucket)
+	exclude := c.String(uploaderFlagExclude)
 	uploadDriver, err := uploader.New(driver, region, accessKey, accessSecret, bucketName)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	dirPath := c.Args().First()
-	if !strings.HasSuffix(dirPath, "/") {
-		dirPath += "/"
-	}
-
 	e := core.NewEngine(uploadDriver)
-	if err := e.LoadAndCompareObjects(dirPath); err != nil {
+	if err := e.LoadAndCompareObjects(dirPath, strings.Split(exclude, ",")...); err != nil {
 		log.Fatalln(err)
 	}
 

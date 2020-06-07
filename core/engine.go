@@ -29,8 +29,8 @@ func NewEngine(uploadDriver uploader.Driver) *Engine {
 }
 
 // LoadAndCompareObjects loads local files and compare with the remote objects
-func (e *Engine) LoadAndCompareObjects(localDir string) error {
-	localObjects, err := loadLocalObjects(localDir)
+func (e *Engine) LoadAndCompareObjects(localDir string, excludePaths ...string) error {
+	localObjects, err := loadLocalObjects(localDir, excludePaths)
 	if err != nil {
 		return err
 	}
@@ -108,10 +108,28 @@ func objectNotMatch(object uploader.Object, objects []uploader.Object) bool {
 	return false
 }
 
-func loadLocalObjects(dirPath string) ([]uploader.Object, error) {
+func shouldExclude(dirPath, filePath string, excludePaths []string) bool {
+	for _, ePath := range excludePaths {
+		if strings.HasPrefix(filePath, dirPath+strings.TrimPrefix(ePath, "/")) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func loadLocalObjects(dirPath string, excludePaths []string) ([]uploader.Object, error) {
+	if !strings.HasSuffix(dirPath, "/") {
+		dirPath += "/"
+	}
+
 	localObjects := make([]uploader.Object, 0)
 	visitor := func(filePath string, info os.FileInfo, err error) error {
-		if info.IsDir() {
+		if os.IsNotExist(err) {
+			return err
+		}
+
+		if info.IsDir() || shouldExclude(dirPath, filePath, excludePaths) {
 			return nil
 		}
 
