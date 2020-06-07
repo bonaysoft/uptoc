@@ -15,16 +15,16 @@ import (
 
 const (
 	// uploader flags
-	uploaderFlagDriver       = "driver"
-	uploaderFlagRegion       = "region"
-	uploaderFlagAccessKey    = "access_key"
-	uploaderFlagAccessSecret = "access_secret"
-	uploaderFlagBucket       = "bucket"
-	uploaderFlagExclude      = "exclude"
+	uploaderFlagDriver    = "driver"
+	uploaderFlagRegion    = "region"
+	uploaderFlagAccessKey = "access_key"
+	uploaderFlagSecretKey = "access_secret"
+	uploaderFlagBucket    = "bucket"
+	uploaderFlagExclude   = "exclude"
 
 	// uploader environments
-	uploaderEnvAccessKey    = "UPTOC_UPLOADER_AK"
-	uploaderEnvAccessSecret = "UPTOC_UPLOADER_SK"
+	uploaderEnvAccessKey = "UPTOC_UPLOADER_AK"
+	uploaderEnvSecretKey = "UPTOC_UPLOADER_SK"
 )
 
 var (
@@ -53,9 +53,9 @@ var (
 			Required: true,
 		},
 		cli.StringFlag{
-			Name:     uploaderFlagAccessSecret,
+			Name:     uploaderFlagSecretKey,
 			Usage:    "specify key secret of the cloud platform",
-			EnvVar:   uploaderEnvAccessSecret,
+			EnvVar:   uploaderEnvSecretKey,
 			Required: true,
 		},
 		cli.StringFlag{
@@ -64,8 +64,9 @@ var (
 			Required: true,
 		},
 		cli.StringFlag{
-			Name:  uploaderFlagExclude,
-			Usage: "specify exclude the given comma separated directories (example: --exclude=.cache,test)",
+			Name:     uploaderFlagExclude,
+			Usage:    "specify exclude the given comma separated directories (example: --exclude=.cache,test)",
+			Required: false,
 		},
 	}
 )
@@ -85,20 +86,25 @@ func main() {
 }
 
 func action(c *cli.Context) {
+	var excludePaths []string
+	ak := c.String(uploaderFlagAccessKey)
+	sk := c.String(uploaderFlagSecretKey)
 	driver := c.String(uploaderFlagDriver)
 	region := c.String(uploaderFlagRegion)
-	accessKey := c.String(uploaderFlagAccessKey)
-	accessSecret := c.String(uploaderFlagAccessSecret)
-	bucketName := c.String(uploaderFlagBucket)
+	bucket := c.String(uploaderFlagBucket)
 	exclude := c.String(uploaderFlagExclude)
-	uploadDriver, err := uploader.New(driver, region, accessKey, accessSecret, bucketName)
+	if exclude != "" {
+		excludePaths = strings.Split(exclude, ",")
+	}
+
+	uploadDriver, err := uploader.New(driver, region, ak, sk, bucket)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	dirPath := c.Args().First()
 	e := core.NewEngine(uploadDriver)
-	if err := e.LoadAndCompareObjects(dirPath, strings.Split(exclude, ",")...); err != nil {
+	if err := e.LoadAndCompareObjects(dirPath, excludePaths...); err != nil {
 		log.Fatalln(err)
 	}
 
