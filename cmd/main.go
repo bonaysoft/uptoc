@@ -97,12 +97,17 @@ func action(c *cli.Context) {
 		excludePaths = strings.Split(exclude, ",")
 	}
 
+	dirPath := c.Args().First()
+	log.Printf("driver: %s\n", driver)
+	log.Printf("region: %s\n", region)
+	log.Printf("bucket: %s\n", bucket)
+	log.Printf("exclude: %s\n", excludePaths)
+	log.Printf("dirPath: %s\n", dirPath)
 	uploadDriver, err := uploader.New(driver, region, ak, sk, bucket)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	dirPath := c.Args().First()
 	e := core.NewEngine(uploadDriver)
 	if err := e.LoadAndCompareObjects(dirPath, excludePaths...); err != nil {
 		log.Fatalln(err)
