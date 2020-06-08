@@ -7,8 +7,7 @@ COPY go.* $APP_HOME/
 RUN go mod download
 
 COPY . .
-RUN make build
+RUN make build && cp build/bin/uptoc /usr/local/bin
 
-COPY build/bin/uptoc /usr/local/bin
 COPY scripts/entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
