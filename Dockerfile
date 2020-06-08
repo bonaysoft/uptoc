@@ -10,4 +10,5 @@ RUN go mod download
 COPY . .
 RUN make build
 
-ENTRYPOINT ["scripts/entrypoint.sh"]
+COPY scripts/entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
