@@ -1,10 +1,13 @@
-FROM alpine:3.10
+FROM golang:1.13
 
-RUN apk add --no-cache curl
+ENV APP_HOME /srv
+WORKDIR $APP_HOME
 
-RUN curl -sSf https://uptoc.saltbo.cn/install.sh | sh
+ENV GOPROXY=https://goproxy.cn,direct
+COPY go.* $APP_HOME/
+RUN go mod download
 
-COPY LICENSE README.md /
-COPY scripts/entrypoint.sh /entrypoint.sh
+COPY . .
+RUN make build
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["scripts/entrypoint.sh"]
