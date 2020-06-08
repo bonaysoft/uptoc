@@ -109,8 +109,9 @@ func objectNotMatch(object uploader.Object, objects []uploader.Object) bool {
 }
 
 func shouldExclude(dirPath, filePath string, excludePaths []string) bool {
+	parentPath := strings.TrimPrefix(dirPath, "./")
 	for _, ePath := range excludePaths {
-		if strings.HasPrefix(filePath, dirPath+strings.TrimPrefix(ePath, "/")) {
+		if strings.HasPrefix(filePath, parentPath+strings.TrimPrefix(ePath, "/")) {
 			return true
 		}
 	}
