@@ -7,4 +7,4 @@ fi
 echo "${ARGS} ${INPUT_DIST}"
 
 # shellcheck disable=SC2086
-build/bin/uptoc ${ARGS} ${INPUT_DIST}
+/srv/build/bin/uptoc ${ARGS} ${INPUT_DIST}
