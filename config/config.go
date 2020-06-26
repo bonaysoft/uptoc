@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -19,9 +20,10 @@ const (
 	UploaderFlagDriver    = "driver"
 	UploaderFlagRegion    = "region"
 	UploaderFlagAccessKey = "access_key"
-	UploaderFlagSecretKey = "access_secret"
+	UploaderFlagSecretKey = "secret_key"
 	UploaderFlagBucket    = "bucket"
 	UploaderFlagExclude   = "exclude"
+	UploaderFlagSaveRoot  = "save_root"
 
 	// uploader environments
 	UploaderEnvAccessKey = "UPTOC_UPLOADER_AK"
@@ -39,6 +41,7 @@ func Parse(ctx *cli.Context) (*Config, error) {
 	if ctx.NumFlags() > 0 {
 		c := &Config{
 			Core: engine.Config{
+				SaveRoot:  ctx.String(UploaderFlagSaveRoot),
 				ForceSync: true,
 			},
 			Driver: uploader.Config{
@@ -92,7 +95,9 @@ func ParseFromRC() (*Config, error) {
 }
 
 func (c *Config) Save() error {
-	c.f.Seek(0, 0)
+	c.f.Seek(0, io.SeekStart)
+	defer c.f.Close()
+
 	ye := yaml.NewEncoder(c.f)
 	if err := ye.Encode(c); err != nil {
 		return err
@@ -105,13 +110,15 @@ func (c *Config) Prompt() error {
 	prompts := []struct {
 		label    string
 		value    *string
+		mask     rune
 		validate promptui.ValidateFunc
 	}{
 		{label: UploaderFlagDriver, value: &c.Driver.Name, validate: uploader.DriverValidate},
 		{label: UploaderFlagRegion, value: &c.Driver.Region},
 		{label: UploaderFlagBucket, value: &c.Driver.Bucket},
 		{label: UploaderFlagAccessKey, value: &c.Driver.AccessKey},
-		{label: UploaderFlagSecretKey, value: &c.Driver.SecretKey},
+		{label: UploaderFlagSecretKey, value: &c.Driver.SecretKey, mask: '*'},
+		{label: UploaderFlagSaveRoot, value: &c.Core.SaveRoot},
 	}
 
 	for _, prompt := range prompts {
@@ -119,6 +126,7 @@ func (c *Config) Prompt() error {
 			Label:    prompt.label,
 			Default:  *prompt.value,
 			Validate: prompt.validate,
+			Mask:     prompt.mask,
 		}
 
 		value, err := pp.Run()

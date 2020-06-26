@@ -32,6 +32,10 @@ var (
 			Usage: "specify region of the cloud platform",
 		},
 		cli.StringFlag{
+			Name:  config.UploaderFlagBucket,
+			Usage: "specify bucket name of the cloud platform",
+		},
+		cli.StringFlag{
 			Name:   config.UploaderFlagAccessKey,
 			Usage:  "specify key id of the cloud platform",
 			EnvVar: config.UploaderEnvAccessKey,
@@ -42,12 +46,12 @@ var (
 			EnvVar: config.UploaderEnvSecretKey,
 		},
 		cli.StringFlag{
-			Name:  config.UploaderFlagBucket,
-			Usage: "specify bucket name of the cloud platform",
-		},
-		cli.StringFlag{
 			Name:  config.UploaderFlagExclude,
 			Usage: "specify exclude the given comma separated directories (example: --exclude=.cache,test)",
+		},
+		cli.StringFlag{
+			Name:  config.UploaderFlagSaveRoot,
+			Usage: "specify remote directory, default is root",
 		},
 	}
 )
@@ -64,7 +68,6 @@ func main() {
 			Name:   "config",
 			Usage:  "config set up the engine for the bucket.",
 			Action: configAction,
-			Flags:  flags,
 		},
 	}
 	app.Flags = flags

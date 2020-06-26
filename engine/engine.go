@@ -13,9 +13,8 @@ import (
 type Config struct {
 	SaveRoot  string   `yaml:"save_root"`
 	VisitHost string   `yaml:"visit_host"`
-	Overwrite bool     `yaml:"overwrite"`
 	ForceSync bool     `yaml:"force_sync"`
-	Excludes  []string `yaml:"exclude"`
+	Excludes  []string `yaml:"excludes"`
 }
 
 type Engine struct {
