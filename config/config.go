@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/manifoldco/promptui"
 	"github.com/urfave/cli"
 	"gopkg.in/yaml.v2"
 
@@ -56,10 +57,10 @@ func Parse(ctx *cli.Context) (*Config, error) {
 		return c, nil
 	}
 
-	return parseFromRC()
+	return ParseFromRC()
 }
 
-func parseFromRC() (*Config, error) {
+func ParseFromRC() (*Config, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return nil, err
@@ -95,6 +96,37 @@ func (c *Config) Save() error {
 	ye := yaml.NewEncoder(c.f)
 	if err := ye.Encode(c); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (c *Config) Prompt() error {
+	prompts := []struct {
+		label    string
+		value    *string
+		validate promptui.ValidateFunc
+	}{
+		{label: UploaderFlagDriver, value: &c.Driver.Name, validate: uploader.DriverValidate},
+		{label: UploaderFlagRegion, value: &c.Driver.Region},
+		{label: UploaderFlagBucket, value: &c.Driver.Bucket},
+		{label: UploaderFlagAccessKey, value: &c.Driver.AccessKey},
+		{label: UploaderFlagSecretKey, value: &c.Driver.SecretKey},
+	}
+
+	for _, prompt := range prompts {
+		pp := promptui.Prompt{
+			Label:    prompt.label,
+			Default:  *prompt.value,
+			Validate: prompt.validate,
+		}
+
+		value, err := pp.Run()
+		if err != nil {
+			return err
+		}
+
+		*prompt.value = value
 	}
 
 	return nil

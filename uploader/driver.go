@@ -46,6 +46,20 @@ var supportDrivers = map[string]string{
 	"aws":    "%s",
 }
 
+func DriverValidate(name string) error {
+	if _, ok := supportDrivers[name]; ok {
+		return nil
+	}
+
+	drivers := make([]string, 0)
+	for driver := range supportDrivers {
+		drivers = append(drivers, driver)
+	}
+
+	driversTxt := strings.Join(drivers, ",")
+	return fmt.Errorf("driver '%s' not support. only support: %v", name, driversTxt)
+}
+
 // New is a instantiation function to find and init a upload driver.
 func New(driver Config) (Driver, error) {
 	if _, exist := supportDrivers[driver.Name]; !exist {

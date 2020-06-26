@@ -97,3 +97,8 @@ func TestNotSupportDriver(t *testing.T) {
 	})
 	assert.Error(t, err)
 }
+
+func TestDriverValidate(t *testing.T) {
+	assert.Error(t, DriverValidate("test"))
+	assert.NoError(t, DriverValidate("oss"))
+}

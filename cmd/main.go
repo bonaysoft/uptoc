@@ -75,8 +75,12 @@ func main() {
 }
 
 func configAction(ctx *cli.Context) {
-	c, err := config.Parse(ctx)
+	c, err := config.ParseFromRC()
 	if err != nil {
+		log.Fatalln(err)
+	}
+
+	if err := c.Prompt(); err != nil {
 		log.Fatalln(err)
 	}
 
