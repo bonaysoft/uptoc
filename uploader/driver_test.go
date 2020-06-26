@@ -12,36 +12,41 @@ import (
 	"uptoc/utils"
 )
 
-var driverConfigs = map[string]map[string]string{
-	"cos": {
-		"bucket":        "ut-uptoc-1255970412",
-		"region":        "ap-shanghai",
-		"access_key":    os.Getenv("UPLOADER_COS_AK"),
-		"access_secret": os.Getenv("UPLOADER_COS_SK"),
+var driverConfigs = []Config{
+	{
+		Name:      "cos",
+		Region:    "ap-shanghai",
+		Bucket:    "ut-uptoc-1255970412",
+		AccessKey: os.Getenv("UPLOADER_COS_AK"),
+		SecretKey: os.Getenv("UPLOADER_COS_SK"),
 	},
-	"oss": {
-		"bucket":        "ut-uptoc",
-		"region":        "cn-hangzhou",
-		"access_key":    os.Getenv("UPLOADER_OSS_AK"),
-		"access_secret": os.Getenv("UPLOADER_OSS_SK"),
+	{
+		Name:      "oss",
+		Region:    "cn-hangzhou",
+		Bucket:    "ut-uptoc",
+		AccessKey: os.Getenv("UPLOADER_OSS_AK"),
+		SecretKey: os.Getenv("UPLOADER_OSS_SK"),
 	},
-	"qiniu": {
-		"bucket":        "ut-uptoc",
-		"region":        "cn-east-1",
-		"access_key":    os.Getenv("UPLOADER_QINIU_AK"),
-		"access_secret": os.Getenv("UPLOADER_QINIU_SK"),
+	{
+		Name:      "qiniu",
+		Region:    "cn-east-1",
+		Bucket:    "ut-uptoc",
+		AccessKey: os.Getenv("UPLOADER_QINIU_AK"),
+		SecretKey: os.Getenv("UPLOADER_QINIU_SK"),
 	},
-	"aws": {
-		"bucket":        "ut-uptoc",
-		"region":        "ap-northeast-1",
-		"access_key":    os.Getenv("UPLOADER_S3_AK"),
-		"access_secret": os.Getenv("UPLOADER_S3_SK"),
+	{
+		Name:      "aws",
+		Region:    "ap-northeast-1",
+		Bucket:    "ut-uptoc",
+		AccessKey: os.Getenv("UPLOADER_S3_AK"),
+		SecretKey: os.Getenv("UPLOADER_S3_SK"),
 	},
-	"google": {
-		"bucket":        "ut-uptoc",
-		"region":        "auto",
-		"access_key":    os.Getenv("UPLOADER_STORAGE_AK"),
-		"access_secret": os.Getenv("UPLOADER_STORAGE_SK"),
+	{
+		Name:      "google",
+		Region:    "auto",
+		Bucket:    "ut-uptoc",
+		AccessKey: os.Getenv("UPLOADER_STORAGE_AK"),
+		SecretKey: os.Getenv("UPLOADER_STORAGE_SK"),
 	},
 }
 
@@ -59,9 +64,9 @@ func TestUploader(t *testing.T) {
 	}
 
 	// test the all drivers
-	for driver, config := range driverConfigs {
-		log.Printf("===== driver: %s =====", driver)
-		uploader, err := New(driver, config["region"], config["access_key"], config["access_secret"], config["bucket"])
+	for _, config := range driverConfigs {
+		log.Printf("===== driver =====\n%v", config)
+		uploader, err := New(config)
 		assert.NoError(t, err)
 
 		// test object upload
@@ -70,7 +75,7 @@ func TestUploader(t *testing.T) {
 		}
 
 		// test objects list
-		objects, err := uploader.ListObjects()
+		objects, err := uploader.ListObjects("")
 		assert.NoError(t, err)
 		assert.Equal(t, len(files), len(objects))
 
@@ -87,6 +92,8 @@ func TestUploader(t *testing.T) {
 }
 
 func TestNotSupportDriver(t *testing.T) {
-	_, err := New("abc", "test", "test", "test", "test")
+	_, err := New(Config{
+		Name: "abc",
+	})
 	assert.Error(t, err)
 }

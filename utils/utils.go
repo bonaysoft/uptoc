@@ -33,7 +33,7 @@ func FileContentType(filepath string) string {
 	if mimeType != "" {
 		return mimeType
 	}
-	
+
 	fileData, err := ioutil.ReadFile(filepath)
 	if err != nil {
 		return ""

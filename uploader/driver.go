@@ -24,9 +24,17 @@ type Object struct {
 // Driver is the interface that must be implemented by a cloud
 // storage driver.
 type Driver interface {
-	ListObjects() ([]Object, error)
+	ListObjects(prefix string) ([]Object, error)
 	Upload(object, rawPath string) error
 	Delete(object string) error
+}
+
+type Config struct {
+	Name      string `yaml:"name"`
+	Region    string `yaml:"region"`
+	Bucket    string `yaml:"bucket"`
+	AccessKey string `yaml:"access_key"`
+	SecretKey string `yaml:"secret_key"`
 }
 
 // driver => endpoint format template
@@ -39,18 +47,18 @@ var supportDrivers = map[string]string{
 }
 
 // New is a instantiation function to find and init a upload driver.
-func New(driver, region, accessKey, secretKey, bucketName string) (Driver, error) {
-	if _, exist := supportDrivers[driver]; !exist {
-		return nil, fmt.Errorf("driver[%s] not support", driver)
+func New(driver Config) (Driver, error) {
+	if _, exist := supportDrivers[driver.Name]; !exist {
+		return nil, fmt.Errorf("driver[%s] not support", driver.Name)
 	}
 
-	endpoint := supportDrivers[driver]
+	endpoint := supportDrivers[driver.Name]
 	if strings.Contains(endpoint, "%s") {
-		endpoint = fmt.Sprintf(endpoint, region)
+		endpoint = fmt.Sprintf(endpoint, driver.Region)
 	}
-	if driver == "aws" {
+	if driver.Name == "aws" {
 		endpoint = ""
 	}
 
-	return NewS3Uploader(region, endpoint, accessKey, secretKey, bucketName)
+	return NewS3Uploader(driver.Region, endpoint, driver.AccessKey, driver.SecretKey, driver.Bucket)
 }

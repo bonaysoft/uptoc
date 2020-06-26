@@ -33,12 +33,13 @@ func NewS3Uploader(region, endpoint, accessKey, secretKey, bucketName string) (D
 }
 
 // ListObjects returns some remote objects
-func (u *S3Uploader) ListObjects() ([]Object, error) {
+func (u *S3Uploader) ListObjects(prefix string) ([]Object, error) {
 	marker := ""
 	objects := make([]Object, 0)
 	for {
 		input := &s3.ListObjectsInput{
 			Bucket: aws.String(u.bucket),
+			Prefix: aws.String(prefix),
 			Marker: aws.String(marker),
 		}
 		objectsResult, err := u.client.ListObjects(input)

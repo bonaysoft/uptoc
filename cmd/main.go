@@ -9,7 +9,8 @@ import (
 
 	"github.com/urfave/cli"
 
-	"uptoc/core"
+	"uptoc/config"
+	"uptoc/engine"
 	"uptoc/uploader"
 )
 
@@ -42,31 +43,26 @@ var (
 			Value: "oss",
 		},
 		cli.StringFlag{
-			Name:     uploaderFlagRegion,
-			Usage:    "specify region of the cloud platform",
-			Required: true,
+			Name:  uploaderFlagRegion,
+			Usage: "specify region of the cloud platform",
 		},
 		cli.StringFlag{
-			Name:     uploaderFlagAccessKey,
-			Usage:    "specify key id of the cloud platform",
-			EnvVar:   uploaderEnvAccessKey,
-			Required: true,
+			Name:   uploaderFlagAccessKey,
+			Usage:  "specify key id of the cloud platform",
+			EnvVar: uploaderEnvAccessKey,
 		},
 		cli.StringFlag{
-			Name:     uploaderFlagSecretKey,
-			Usage:    "specify key secret of the cloud platform",
-			EnvVar:   uploaderEnvSecretKey,
-			Required: true,
+			Name:   uploaderFlagSecretKey,
+			Usage:  "specify key secret of the cloud platform",
+			EnvVar: uploaderEnvSecretKey,
 		},
 		cli.StringFlag{
-			Name:     uploaderFlagBucket,
-			Usage:    "specify bucket name of the cloud platform",
-			Required: true,
+			Name:  uploaderFlagBucket,
+			Usage: "specify bucket name of the cloud platform",
 		},
 		cli.StringFlag{
-			Name:     uploaderFlagExclude,
-			Usage:    "specify exclude the given comma separated directories (example: --exclude=.cache,test)",
-			Required: false,
+			Name:  uploaderFlagExclude,
+			Usage: "specify exclude the given comma separated directories (example: --exclude=.cache,test)",
 		},
 	}
 )
@@ -78,42 +74,73 @@ func main() {
 	app.Copyright = "(c) 2019 saltbo.cn"
 	app.Compiled = time.Now()
 	app.Version = fmt.Sprintf("release: %s, repo: %s, commit: %s", release, repo, commit)
-	app.Flags = flags
-	app.Action = action
+	app.Commands = cli.Commands{
+		cli.Command{
+			Name:   "config",
+			Usage:  "config set up the engine for the bucket.",
+			Action: configAction,
+			Flags:  flags,
+		},
+	}
+	app.Action = appAction
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func action(c *cli.Context) {
-	var excludePaths []string
-	ak := c.String(uploaderFlagAccessKey)
-	sk := c.String(uploaderFlagSecretKey)
-	driver := c.String(uploaderFlagDriver)
-	region := c.String(uploaderFlagRegion)
-	bucket := c.String(uploaderFlagBucket)
-	exclude := c.String(uploaderFlagExclude)
-	if exclude != "" {
-		excludePaths = strings.Split(exclude, ",")
-	}
-
-	dirPath := c.Args().First()
-	log.Printf("driver: %s\n", driver)
-	log.Printf("region: %s\n", region)
-	log.Printf("bucket: %s\n", bucket)
-	log.Printf("exclude: %s\n", excludePaths)
-	log.Printf("dirPath: %s\n", dirPath)
-	uploadDriver, err := uploader.New(driver, region, ak, sk, bucket)
+func configAction(ctx *cli.Context) {
+	c, err := config.Parse()
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	e := core.NewEngine(uploadDriver)
-	if err := e.LoadAndCompareObjects(dirPath, excludePaths...); err != nil {
+	ak := ctx.String(uploaderFlagAccessKey)
+	if ak != "" {
+		c.Driver.AccessKey = ak
+	}
+
+	sk := ctx.String(uploaderFlagSecretKey)
+	if sk != "" {
+		c.Driver.SecretKey = sk
+	}
+
+	driver := ctx.String(uploaderFlagDriver)
+	if driver != "" {
+		c.Driver.Name = driver
+	}
+
+	region := ctx.String(uploaderFlagRegion)
+	if region != "" {
+		c.Driver.Region = region
+	}
+
+	bucket := ctx.String(uploaderFlagBucket)
+	if bucket != "" {
+		c.Driver.Bucket = bucket
+	}
+
+	exclude := ctx.String(uploaderFlagExclude)
+	if exclude != "" {
+		c.Core.Excludes = strings.Split(exclude, ",")
+	}
+
+	if err := c.Save(); err != nil {
+		log.Fatalln(err)
+	}
+}
+
+// 同步一个或多个文件或文件夹到指定目录，同步过程中会进行MD5判定，相同文件不再重复上传
+func appAction(ctx *cli.Context) {
+	conf, err := config.Parse()
+	if err != nil {
 		log.Fatalln(err)
 	}
 
-	if err := e.Sync(); err != nil {
+	ud, err := uploader.New(conf.Driver)
+	if err != nil {
 		log.Fatalln(err)
 	}
+
+	e := engine.New(conf.Core, ud)
+	e.TailRun(ctx.Args()...)
 }
