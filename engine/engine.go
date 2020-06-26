@@ -44,7 +44,7 @@ func (e *Engine) TailRun(paths ...string) {
 			continue
 		}
 
-		e.uploadFile(path)
+		e.uploadFile(path, filepath.Join(e.conf.SaveRoot, stat.Name()))
 	}
 }
 
@@ -60,16 +60,16 @@ func (e *Engine) uploadDirectory(dirPath string) {
 		if err := s.Sync(objects, e.conf.SaveRoot); err != nil {
 			log.Fatalln(err)
 		}
+		return
 	}
 
 	// directory normal upload
 	for _, obj := range objects {
-		e.uploadFile(obj.FilePath)
+		e.uploadFile(obj.FilePath, obj.Key)
 	}
 }
 
-func (e *Engine) uploadFile(filePath string) {
-	object := filepath.Join(e.conf.SaveRoot, filePath)
+func (e *Engine) uploadFile(filePath, object string) {
 	if err := e.uploader.Upload(object, filePath); err != nil {
 		e.Failed(filePath, err)
 		return

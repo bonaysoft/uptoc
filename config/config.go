@@ -6,10 +6,25 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/urfave/cli"
 	"gopkg.in/yaml.v2"
 
 	"uptoc/engine"
 	"uptoc/uploader"
+)
+
+const (
+	// uploader flags
+	UploaderFlagDriver    = "driver"
+	UploaderFlagRegion    = "region"
+	UploaderFlagAccessKey = "access_key"
+	UploaderFlagSecretKey = "access_secret"
+	UploaderFlagBucket    = "bucket"
+	UploaderFlagExclude   = "exclude"
+
+	// uploader environments
+	UploaderEnvAccessKey = "UPTOC_UPLOADER_AK"
+	UploaderEnvSecretKey = "UPTOC_UPLOADER_SK"
 )
 
 type Config struct {
@@ -19,11 +34,32 @@ type Config struct {
 	Driver uploader.Config `yaml:"driver"`
 }
 
-func newConfig(f *os.File) *Config {
-	return &Config{f: f}
+func Parse(ctx *cli.Context) (*Config, error) {
+	if ctx.NumFlags() > 0 {
+		c := &Config{
+			Core: engine.Config{
+				ForceSync: true,
+			},
+			Driver: uploader.Config{
+				Name:      ctx.String(UploaderFlagDriver),
+				Region:    ctx.String(UploaderFlagRegion),
+				Bucket:    ctx.String(UploaderFlagBucket),
+				AccessKey: ctx.String(UploaderFlagAccessKey),
+				SecretKey: ctx.String(UploaderFlagSecretKey),
+			},
+		}
+		exclude := ctx.String(UploaderFlagExclude)
+		if exclude != "" {
+			c.Core.Excludes = strings.Split(exclude, ",")
+		}
+
+		return c, nil
+	}
+
+	return parseFromRC()
 }
 
-func Parse() (*Config, error) {
+func parseFromRC() (*Config, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return nil, err
@@ -37,7 +73,7 @@ func Parse() (*Config, error) {
 		return nil, fmt.Errorf("open .uptocrc failed: %s", err)
 	}
 
-	c := newConfig(f)
+	c := &Config{f: f}
 	yd := yaml.NewDecoder(f)
 	if err := yd.Decode(c); err != nil {
 		return nil, err

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/urfave/cli"
@@ -12,20 +11,6 @@ import (
 	"uptoc/config"
 	"uptoc/engine"
 	"uptoc/uploader"
-)
-
-const (
-	// uploader flags
-	uploaderFlagDriver    = "driver"
-	uploaderFlagRegion    = "region"
-	uploaderFlagAccessKey = "access_key"
-	uploaderFlagSecretKey = "access_secret"
-	uploaderFlagBucket    = "bucket"
-	uploaderFlagExclude   = "exclude"
-
-	// uploader environments
-	uploaderEnvAccessKey = "UPTOC_UPLOADER_AK"
-	uploaderEnvSecretKey = "UPTOC_UPLOADER_SK"
 )
 
 var (
@@ -38,30 +23,30 @@ var (
 
 	flags = []cli.Flag{
 		cli.StringFlag{
-			Name:  uploaderFlagDriver,
+			Name:  config.UploaderFlagDriver,
 			Usage: "specify cloud storage engine",
 			Value: "oss",
 		},
 		cli.StringFlag{
-			Name:  uploaderFlagRegion,
+			Name:  config.UploaderFlagRegion,
 			Usage: "specify region of the cloud platform",
 		},
 		cli.StringFlag{
-			Name:   uploaderFlagAccessKey,
+			Name:   config.UploaderFlagAccessKey,
 			Usage:  "specify key id of the cloud platform",
-			EnvVar: uploaderEnvAccessKey,
+			EnvVar: config.UploaderEnvAccessKey,
 		},
 		cli.StringFlag{
-			Name:   uploaderFlagSecretKey,
+			Name:   config.UploaderFlagSecretKey,
 			Usage:  "specify key secret of the cloud platform",
-			EnvVar: uploaderEnvSecretKey,
+			EnvVar: config.UploaderEnvSecretKey,
 		},
 		cli.StringFlag{
-			Name:  uploaderFlagBucket,
+			Name:  config.UploaderFlagBucket,
 			Usage: "specify bucket name of the cloud platform",
 		},
 		cli.StringFlag{
-			Name:  uploaderFlagExclude,
+			Name:  config.UploaderFlagExclude,
 			Usage: "specify exclude the given comma separated directories (example: --exclude=.cache,test)",
 		},
 	}
@@ -82,6 +67,7 @@ func main() {
 			Flags:  flags,
 		},
 	}
+	app.Flags = flags
 	app.Action = appAction
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
@@ -89,39 +75,9 @@ func main() {
 }
 
 func configAction(ctx *cli.Context) {
-	c, err := config.Parse()
+	c, err := config.Parse(ctx)
 	if err != nil {
 		log.Fatalln(err)
-	}
-
-	ak := ctx.String(uploaderFlagAccessKey)
-	if ak != "" {
-		c.Driver.AccessKey = ak
-	}
-
-	sk := ctx.String(uploaderFlagSecretKey)
-	if sk != "" {
-		c.Driver.SecretKey = sk
-	}
-
-	driver := ctx.String(uploaderFlagDriver)
-	if driver != "" {
-		c.Driver.Name = driver
-	}
-
-	region := ctx.String(uploaderFlagRegion)
-	if region != "" {
-		c.Driver.Region = region
-	}
-
-	bucket := ctx.String(uploaderFlagBucket)
-	if bucket != "" {
-		c.Driver.Bucket = bucket
-	}
-
-	exclude := ctx.String(uploaderFlagExclude)
-	if exclude != "" {
-		c.Core.Excludes = strings.Split(exclude, ",")
 	}
 
 	if err := c.Save(); err != nil {
@@ -129,9 +85,8 @@ func configAction(ctx *cli.Context) {
 	}
 }
 
-// 同步一个或多个文件或文件夹到指定目录，同步过程中会进行MD5判定，相同文件不再重复上传
 func appAction(ctx *cli.Context) {
-	conf, err := config.Parse()
+	conf, err := config.Parse(ctx)
 	if err != nil {
 		log.Fatalln(err)
 	}
