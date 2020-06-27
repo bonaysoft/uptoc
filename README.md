@@ -20,13 +20,37 @@ English | [🇨🇳中文](https://saltbo.cn/uptoc)
 - Google Storage
 - AWS S3
 
-## Install
+## Install the pre-compiled binary
 
-Download the appropriate binary for your platform from the [Releases](https://github.com/saltbo/uptoc/releases) page, or:
+**homebrew tap**:
 
-```bash
-curl -sSf http://uptoc.saltbo.cn/install.sh | sh
+```console
+$ brew install saltbo/bin/uptoc
 ```
+
+**homebrew** (may not be the latest version):
+
+```console
+$ brew install uptoc
+```
+
+**deb/rpm**:
+
+Download the `.deb` or `.rpm` from the [releases page](releases) and
+install with `dpkg -i` and `rpm -i` respectively.
+
+**Shell script**:
+
+```console
+$ curl -sSf https://static.saltbo.cn/github.com/uptoc/install.sh | sh
+```
+
+**manually**:
+
+Download the pre-compiled binaries from the [releases page](releases) and
+copy to the desired location.
+
+
 
 ## Usage
 
@@ -77,6 +101,8 @@ after_success:
 | google | ut-uptoc  | auto  | - |
 | s3     | ut-uptoc  | ap-northeast-1  |  [Regions](https://docs.aws.amazon.com/general/latest/gr/rande.html#regional-endpoints)  |
 
+## Contributing
+See [CONTRIBUTING](CONTRIBUTING.md) for details on submitting patches and the contribution workflow.
 
 ## Contact us
 - [Author Blog](https://saltbo.cn).
