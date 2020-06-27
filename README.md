@@ -36,7 +36,7 @@ $ brew install uptoc
 
 **deb/rpm**:
 
-Download the `.deb` or `.rpm` from the [releases page](releases) and
+Download the `.deb` or `.rpm` from the [releases page](https://github.com/saltbo/uptoc/releases) and
 install with `dpkg -i` and `rpm -i` respectively.
 
 **Shell script**:
@@ -47,7 +47,7 @@ $ curl -sSf https://static.saltbo.cn/github.com/uptoc/install.sh | sh
 
 **manually**:
 
-Download the pre-compiled binaries from the [releases page](releases) and
+Download the pre-compiled binaries from the [releases page](https://github.com/saltbo/uptoc/releases) and
 copy to the desired location.
 
 
