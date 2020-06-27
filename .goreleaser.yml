@@ -38,6 +38,9 @@ brews:
   - github:
       owner: saltbo
       name: homebrew-bin
+    commit_author:
+      name: Ambor
+      email: saltbo@foxmail.com
     folder: Formula
     homepage: https://github.com/saltbo/uptoc
     description: A static file deployment tool that supports multiple platforms
