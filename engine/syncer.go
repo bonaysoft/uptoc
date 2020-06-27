@@ -15,7 +15,7 @@ type Syncer struct {
 	tobeDeletedObjects  []uploader.Object
 }
 
-// New returns a new syncer.
+// NewSyncer returns a new syncer.
 func NewSyncer(uploadDriver uploader.Driver) *Syncer {
 	return &Syncer{
 		uploader: uploadDriver,

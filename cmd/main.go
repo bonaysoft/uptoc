@@ -86,10 +86,6 @@ func configAction(ctx *cli.Context) {
 	if err := c.Prompt(); err != nil {
 		log.Fatalln(err)
 	}
-
-	if err := c.Save(); err != nil {
-		log.Fatalln(err)
-	}
 }
 
 func appAction(ctx *cli.Context) {

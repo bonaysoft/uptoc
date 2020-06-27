@@ -30,6 +30,7 @@ const (
 	UploaderEnvSecretKey = "UPTOC_UPLOADER_SK"
 )
 
+// Config provides yml configuration.
 type Config struct {
 	f *os.File
 
@@ -37,6 +38,8 @@ type Config struct {
 	Driver uploader.Config `yaml:"driver"`
 }
 
+// Parse returns Config from RC file if no flags and
+// returns Config from flags if any flags exist.
 func Parse(ctx *cli.Context) (*Config, error) {
 	if ctx.NumFlags() > 0 {
 		c := &Config{
@@ -63,6 +66,7 @@ func Parse(ctx *cli.Context) (*Config, error) {
 	return ParseFromRC()
 }
 
+// ParseFromRC returns Config from rc file
 func ParseFromRC() (*Config, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
@@ -94,18 +98,7 @@ func ParseFromRC() (*Config, error) {
 	return c, nil
 }
 
-func (c *Config) Save() error {
-	c.f.Seek(0, io.SeekStart)
-	defer c.f.Close()
-
-	ye := yaml.NewEncoder(c.f)
-	if err := ye.Encode(c); err != nil {
-		return err
-	}
-
-	return nil
-}
-
+// Prompt implement a prompt for the config
 func (c *Config) Prompt() error {
 	prompts := []struct {
 		label    string
@@ -137,5 +130,7 @@ func (c *Config) Prompt() error {
 		*prompt.value = value
 	}
 
-	return nil
+	defer c.f.Close()
+	c.f.Seek(0, io.SeekStart)
+	return yaml.NewEncoder(c.f).Encode(c)
 }

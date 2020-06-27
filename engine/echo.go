@@ -2,12 +2,12 @@ package engine
 
 import "fmt"
 
-type Echo struct {
+type echo struct {
 	failedIdx  int
 	successIdx int
 }
 
-func (e *Echo) Success(host, path string) {
+func (e *echo) Success(host, path string) {
 	if e.successIdx == 0 {
 		fmt.Println("Upload Success:")
 	}
@@ -16,7 +16,7 @@ func (e *Echo) Success(host, path string) {
 	fmt.Printf("%s%s\n", host, path)
 }
 
-func (e *Echo) Failed(path string, err error) {
+func (e *echo) Failed(path string, err error) {
 	if e.failedIdx == 0 {
 		fmt.Println("Upload Failed:")
 	}

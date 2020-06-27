@@ -21,14 +21,14 @@ type Object struct {
 	Type     string // local file type, added or changed
 }
 
-// Driver is the interface that must be implemented by a cloud
-// storage driver.
+// Driver is the interface that must be implemented by a cloud storage driver.
 type Driver interface {
 	ListObjects(prefix string) ([]Object, error)
 	Upload(object, rawPath string) error
 	Delete(object string) error
 }
 
+// Config provides driver configuration for the uploader.
 type Config struct {
 	Name      string `yaml:"name"`
 	Region    string `yaml:"region"`
@@ -46,6 +46,7 @@ var supportDrivers = map[string]string{
 	"aws":    "%s",
 }
 
+// DriverValidate is a func to validate driver
 func DriverValidate(name string) error {
 	if _, ok := supportDrivers[name]; ok {
 		return nil

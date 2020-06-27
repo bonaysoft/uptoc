@@ -10,6 +10,7 @@ import (
 	"uptoc/utils"
 )
 
+// Config provides core configuration for the engine.
 type Config struct {
 	SaveRoot  string   `yaml:"save_root"`
 	VisitHost string   `yaml:"visit_host"`
@@ -17,13 +18,15 @@ type Config struct {
 	Excludes  []string `yaml:"excludes"`
 }
 
+// Engine provides the core logic to finish the feature
 type Engine struct {
-	Echo
+	echo
 	conf Config
 
 	uploader uploader.Driver
 }
 
+// NewEngine returns a new engine.
 func New(conf Config, ud uploader.Driver) *Engine {
 	return &Engine{
 		conf:     conf,
@@ -31,6 +34,7 @@ func New(conf Config, ud uploader.Driver) *Engine {
 	}
 }
 
+// TailRun run the core logic with every path.
 func (e *Engine) TailRun(paths ...string) {
 	for _, path := range paths {
 		stat, err := os.Stat(path)
