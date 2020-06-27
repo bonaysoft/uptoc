@@ -43,13 +43,13 @@ brews:
       email: saltbo@foxmail.com
     folder: Formula
     homepage: https://github.com/saltbo/uptoc
-    description: A static file deployment tool that supports multiple platforms
+    description: Convenient static file deployment tool that supports multiple platforms
     test: |
-      system "#{bin}/uptoc --version"
+      system "#{bin}/uptoc", "--version"
 nfpms:
   - file_name_template: '{{ .ProjectName }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
     homepage: https://github.com/saltbo/uptoc
-    description: A static file deployment tool that supports multiple platforms
+    description: Convenient static file deployment tool that supports multiple platforms
     maintainer: Ambor <saltbo@foxmail.com>
     license: MIT
     formats:
