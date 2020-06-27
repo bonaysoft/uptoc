@@ -24,14 +24,14 @@ English | [🇨🇳中文](https://saltbo.cn/uptoc)
 
 **homebrew tap**:
 
-```console
-$ brew install saltbo/bin/uptoc
+```bash
+brew install saltbo/bin/uptoc
 ```
 
 **homebrew** (may not be the latest version):
 
-```console
-$ brew install uptoc
+```bash
+brew install uptoc
 ```
 
 **deb/rpm**:
@@ -41,16 +41,14 @@ install with `dpkg -i` and `rpm -i` respectively.
 
 **Shell script**:
 
-```console
-$ curl -sSf https://static.saltbo.cn/github.com/uptoc/install.sh | sh
+```bash
+curl -sSf https://static.saltbo.cn/github.com/uptoc/install.sh | sh
 ```
 
 **manually**:
 
 Download the pre-compiled binaries from the [releases page](https://github.com/saltbo/uptoc/releases) and
 copy to the desired location.
-
-
 
 ## Usage
 
