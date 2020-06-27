@@ -20,40 +20,6 @@ var (
 	repo = "unknown"
 	// COMMIT returns the short sha from git
 	commit = "unknown"
-
-	flags = []cli.Flag{
-		cli.StringFlag{
-			Name:  config.UploaderFlagDriver,
-			Usage: "specify cloud storage engine",
-			Value: "oss",
-		},
-		cli.StringFlag{
-			Name:  config.UploaderFlagRegion,
-			Usage: "specify region of the cloud platform",
-		},
-		cli.StringFlag{
-			Name:  config.UploaderFlagBucket,
-			Usage: "specify bucket name of the cloud platform",
-		},
-		cli.StringFlag{
-			Name:   config.UploaderFlagAccessKey,
-			Usage:  "specify key id of the cloud platform",
-			EnvVar: config.UploaderEnvAccessKey,
-		},
-		cli.StringFlag{
-			Name:   config.UploaderFlagSecretKey,
-			Usage:  "specify key secret of the cloud platform",
-			EnvVar: config.UploaderEnvSecretKey,
-		},
-		cli.StringFlag{
-			Name:  config.UploaderFlagExclude,
-			Usage: "specify exclude the given comma separated directories (example: --exclude=.cache,test)",
-		},
-		cli.StringFlag{
-			Name:  config.UploaderFlagSaveRoot,
-			Usage: "specify remote directory, default is root",
-		},
-	}
 )
 
 func main() {
@@ -70,7 +36,7 @@ func main() {
 			Action: configAction,
 		},
 	}
-	app.Flags = flags
+	app.Flags = config.Flags
 	app.Action = appAction
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)

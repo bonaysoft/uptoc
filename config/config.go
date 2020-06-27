@@ -15,21 +15,6 @@ import (
 	"uptoc/uploader"
 )
 
-const (
-	// uploader flags
-	UploaderFlagDriver    = "driver"
-	UploaderFlagRegion    = "region"
-	UploaderFlagAccessKey = "access_key"
-	UploaderFlagSecretKey = "secret_key"
-	UploaderFlagBucket    = "bucket"
-	UploaderFlagExclude   = "exclude"
-	UploaderFlagSaveRoot  = "save_root"
-
-	// uploader environments
-	UploaderEnvAccessKey = "UPTOC_UPLOADER_AK"
-	UploaderEnvSecretKey = "UPTOC_UPLOADER_SK"
-)
-
 // Config provides yml configuration.
 type Config struct {
 	f *os.File
@@ -44,18 +29,18 @@ func Parse(ctx *cli.Context) (*Config, error) {
 	if ctx.NumFlags() > 0 {
 		c := &Config{
 			Core: engine.Config{
-				SaveRoot:  ctx.String(UploaderFlagSaveRoot),
+				SaveRoot:  ctx.String(uploaderFlagSaveRoot),
 				ForceSync: true,
 			},
 			Driver: uploader.Config{
-				Name:      ctx.String(UploaderFlagDriver),
-				Region:    ctx.String(UploaderFlagRegion),
-				Bucket:    ctx.String(UploaderFlagBucket),
-				AccessKey: ctx.String(UploaderFlagAccessKey),
-				SecretKey: ctx.String(UploaderFlagSecretKey),
+				Name:      ctx.String(uploaderFlagDriver),
+				Region:    ctx.String(uploaderFlagRegion),
+				Bucket:    ctx.String(uploaderFlagBucket),
+				AccessKey: ctx.String(uploaderFlagAccessKey),
+				SecretKey: ctx.String(uploaderFlagSecretKey),
 			},
 		}
-		exclude := ctx.String(UploaderFlagExclude)
+		exclude := ctx.String(uploaderFlagExclude)
 		if exclude != "" {
 			c.Core.Excludes = strings.Split(exclude, ",")
 		}
@@ -106,12 +91,12 @@ func (c *Config) Prompt() error {
 		mask     rune
 		validate promptui.ValidateFunc
 	}{
-		{label: UploaderFlagDriver, value: &c.Driver.Name, validate: uploader.DriverValidate},
-		{label: UploaderFlagRegion, value: &c.Driver.Region},
-		{label: UploaderFlagBucket, value: &c.Driver.Bucket},
-		{label: UploaderFlagAccessKey, value: &c.Driver.AccessKey},
-		{label: UploaderFlagSecretKey, value: &c.Driver.SecretKey, mask: '*'},
-		{label: UploaderFlagSaveRoot, value: &c.Core.SaveRoot},
+		{label: uploaderFlagDriver, value: &c.Driver.Name, validate: uploader.DriverValidate},
+		{label: uploaderFlagRegion, value: &c.Driver.Region},
+		{label: uploaderFlagBucket, value: &c.Driver.Bucket},
+		{label: uploaderFlagAccessKey, value: &c.Driver.AccessKey},
+		{label: uploaderFlagSecretKey, value: &c.Driver.SecretKey, mask: '*'},
+		{label: uploaderFlagSaveRoot, value: &c.Core.SaveRoot},
 	}
 
 	for _, prompt := range prompts {

@@ -26,7 +26,7 @@ type Engine struct {
 	uploader uploader.Driver
 }
 
-// NewEngine returns a new engine.
+// New returns a new engine.
 func New(conf Config, ud uploader.Driver) *Engine {
 	return &Engine{
 		conf:     conf,
