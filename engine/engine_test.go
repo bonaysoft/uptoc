@@ -13,25 +13,29 @@ import (
 )
 
 type mockUploader struct {
+	listErr   error
+	uploadErr error
+	deleteErr error
 }
 
-func (m mockUploader) ListObjects(prefix string) ([]uploader.Object, error) {
+func (m *mockUploader) ListObjects(prefix string) ([]uploader.Object, error) {
 	return []uploader.Object{
 		{Key: "abc1.txt", ETag: "abc123"},
+		{Key: "abc2.txt", ETag: "d0970714757783e6cf17b26fb8e2298f"},
 		{Key: "abc4.txt", ETag: "aaa123"},
-	}, nil
+	}, m.listErr
 }
 
-func (m mockUploader) Upload(object, rawPath string) error {
+func (m *mockUploader) Upload(object, rawPath string) error {
 	if strings.HasSuffix(object, "failed.txt") {
 		return fmt.Errorf("test error")
 	}
 
-	return nil
+	return m.uploadErr
 }
 
-func (m mockUploader) Delete(object string) error {
-	return nil
+func (m *mockUploader) Delete(object string) error {
+	return m.deleteErr
 }
 
 func TestEngine_TailRun(t *testing.T) {

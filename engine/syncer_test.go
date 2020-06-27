@@ -3,6 +3,7 @@ package engine
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -32,4 +33,23 @@ func TestSync(t *testing.T) {
 	// test
 	syncer := NewSyncer(&mockUploader{})
 	assert.NoError(t, syncer.Sync(localObjects, ""))
+}
+
+func TestSync2(t *testing.T) {
+	objects := []uploader.Object{
+		{
+			Key:      "test",
+			FilePath: "test",
+			Type:     "text/plain",
+		},
+	}
+
+	s := NewSyncer(&mockUploader{listErr: fmt.Errorf("list error")})
+	assert.Error(t, s.Sync(objects, ""))
+
+	s = NewSyncer(&mockUploader{uploadErr: fmt.Errorf("upload error")})
+	assert.Error(t, s.Sync(objects, ""))
+
+	s = NewSyncer(&mockUploader{deleteErr: fmt.Errorf("delete error")})
+	assert.Error(t, s.Sync(objects, ""))
 }

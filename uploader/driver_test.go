@@ -91,6 +91,12 @@ func TestUploader(t *testing.T) {
 	}
 }
 
+func TestS3Uploader_Upload(t *testing.T) {
+	u, err := New(driverConfigs[0])
+	assert.NoError(t, err)
+	assert.Error(t, u.Upload("aaa.txt", "/tmp/abc123/aaa.txt"))
+}
+
 func TestNotSupportDriver(t *testing.T) {
 	_, err := New(Config{
 		Name: "abc",
