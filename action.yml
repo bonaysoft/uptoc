@@ -21,6 +21,9 @@ inputs:
   dist:
     description: 'specify dist of the local directory'
     required: true
+  saveroot:
+    description: 'specify remote path for the files'
+    required: false
 
 runs:
   using: 'docker'
