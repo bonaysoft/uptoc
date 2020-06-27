@@ -59,7 +59,7 @@ func ParseFromRC() (*Config, error) {
 	}
 
 	rcPath := filepath.Join(homeDir, ".uptocrc")
-	f, err := os.OpenFile(rcPath, os.O_CREATE|os.O_RDWR, 0644)
+	f, err := os.OpenFile(rcPath, os.O_RDWR, 0644)
 	if os.IsNotExist(err) {
 		return nil, fmt.Errorf("please setup your config by run `uptoc config`")
 	} else if err != nil {
@@ -69,7 +69,7 @@ func ParseFromRC() (*Config, error) {
 	c := &Config{f: f}
 	yd := yaml.NewDecoder(f)
 	if err := yd.Decode(c); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("decode config failed: %s", err)
 	}
 
 	if strings.HasPrefix(c.Core.SaveRoot, "/") {

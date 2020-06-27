@@ -1,6 +1,6 @@
 # Contributing
 
-By participating to this project, you agree to abide our [code of conduct](/CODE_OF_CONDUCT.md).
+By participating to this project, you agree to abide our [code of conduct](/CODEOFCONDUCT.md).
 
 ## Setup your machine
 
@@ -71,4 +71,3 @@ Thank you to all our backers! [[Become a backer](https://opencollective.com/salt
 ### Sponsors
 
 Thank you to all our sponsors! (please ask your company to also support this open source project by [becoming a sponsor](https://opencollective.com/saltbo#sponsor))
-
