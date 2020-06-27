@@ -1,12 +1,7 @@
-# This is an example goreleaser.yaml file with some sane defaults.
-# Make sure to check the documentation at http://goreleaser.com
 dist: ./build/release
 before:
   hooks:
-    # You may remove this if you don't use go modules.
     - go mod download
-    # you may remove this if you don't need go generate
-    - go generate ./...
 builds:
   - id: server
     main: ./cmd/main.go
@@ -19,7 +14,6 @@ builds:
       - darwin
     goarch:
       - amd64
-
 archives:
   - name_template: "{{ .ProjectName }}-{{ .Os }}-{{ .Arch }}"
     replacements:
@@ -40,3 +34,25 @@ changelog:
     exclude:
       - '^docs:'
       - '^test:'
+brews:
+  - github:
+      owner: saltbo
+      name: homebrew-bin
+    folder: Formula
+    homepage: https://github.com/saltbo/uptoc
+    description: A static file deployment tool that supports multiple platforms
+    test: |
+      system "#{bin}/uptoc --version"
+nfpms:
+  - file_name_template: '{{ .ProjectName }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    homepage: https://github.com/saltbo/uptoc
+    description: A static file deployment tool that supports multiple platforms
+    maintainer: Ambor <saltbo@foxmail.com>
+    license: MIT
+    formats:
+      - deb
+      - rpm
+    dependencies:
+      - git
+    recommends:
+      - golang
