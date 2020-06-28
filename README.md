@@ -42,7 +42,7 @@ install with `dpkg -i` and `rpm -i` respectively.
 **Shell script**:
 
 ```bash
-curl -sSf https://static.saltbo.cn/github.com/uptoc/install.sh | sh
+curl -sSf http://uptoc.saltbo.cn/install.sh | sh
 ```
 
 **manually**:
