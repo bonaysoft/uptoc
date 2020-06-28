@@ -42,7 +42,7 @@ install with `dpkg -i` and `rpm -i` respectively.
 **Shell script**:
 
 ```bash
-curl -sSf http://uptoc.saltbo.cn/install.sh | sh
+curl -sSf https://uptoc.saltbo.cn/install.sh | sh
 ```
 
 **manually**:
@@ -82,12 +82,6 @@ steps:
     env:
       UPTOC_UPLOADER_AK: ${{ secrets.UPTOC_UPLOADER_KEYID }}
       UPTOC_UPLOADER_SK: ${{ secrets.UPTOC_UPLOADER_KEYSECRET }}
-```
-### Similar Travis 
-```yaml
-after_success:
-  - curl -sSf http://uptoc.saltbo.cn/install.sh | sh
-  - uptoc --region cn-zhangjiakou --bucket blog-bucket public
 ```
 
 ## Args Examples
