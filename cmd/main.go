@@ -44,9 +44,9 @@ func main() {
 }
 
 func configAction(ctx *cli.Context) {
-	c, err := config.ParseFromRC()
-	if err != nil {
-		log.Fatalln(err)
+	c := config.New()
+	if err := c.Parse(); err == nil {
+		log.Println("WARN: You are modifying an existing configuration!")
 	}
 
 	if err := c.Prompt(); err != nil {
@@ -55,7 +55,7 @@ func configAction(ctx *cli.Context) {
 }
 
 func appAction(ctx *cli.Context) {
-	conf, err := config.Parse(ctx)
+	conf, err := config.NewWithCtx(ctx)
 	if err != nil {
 		log.Fatalln(err)
 	}
