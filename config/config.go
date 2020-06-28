@@ -30,17 +30,17 @@ func NewWithCtx(ctx *cli.Context) (*Config, error) {
 	c := New()
 	if ctx.NumFlags() > 0 {
 		c.Core = engine.Config{
-			SaveRoot:  ctx.String(uploaderFlagSaveRoot),
+			SaveRoot:  ctx.String(uploaderSaveRoot),
 			ForceSync: true,
 		}
 		c.Driver = uploader.Config{
-			Name:      ctx.String(uploaderFlagDriver),
-			Region:    ctx.String(uploaderFlagRegion),
-			Bucket:    ctx.String(uploaderFlagBucket),
-			AccessKey: ctx.String(uploaderFlagAccessKey),
-			SecretKey: ctx.String(uploaderFlagSecretKey),
+			Name:      ctx.String(uploaderDriver),
+			Region:    ctx.String(uploaderRegion),
+			Bucket:    ctx.String(uploaderBucket),
+			AccessKey: ctx.String(uploaderAccessKey),
+			SecretKey: ctx.String(uploaderSecretKey),
 		}
-		if exclude := ctx.String(uploaderFlagExclude); exclude != "" {
+		if exclude := ctx.String(uploaderExclude); exclude != "" {
 			c.Core.Excludes = strings.Split(exclude, ",")
 		}
 	} else if err := c.Parse(); err != nil {
@@ -76,12 +76,13 @@ func (c *Config) Prompt() error {
 		mask     rune
 		validate promptui.ValidateFunc
 	}{
-		{label: uploaderFlagDriver, value: &c.Driver.Name, validate: uploader.DriverValidate},
-		{label: uploaderFlagRegion, value: &c.Driver.Region},
-		{label: uploaderFlagBucket, value: &c.Driver.Bucket},
-		{label: uploaderFlagAccessKey, value: &c.Driver.AccessKey},
-		{label: uploaderFlagSecretKey, value: &c.Driver.SecretKey, mask: '*'},
-		{label: uploaderFlagSaveRoot, value: &c.Core.SaveRoot},
+		{label: uploaderDriver, value: &c.Driver.Name, validate: uploader.DriverValidate},
+		{label: uploaderRegion, value: &c.Driver.Region},
+		{label: uploaderBucket, value: &c.Driver.Bucket},
+		{label: uploaderAccessKey, value: &c.Driver.AccessKey},
+		{label: uploaderSecretKey, value: &c.Driver.SecretKey, mask: '*'},
+		{label: uploaderSaveRoot, value: &c.Core.SaveRoot},
+		{label: uploaderVisitHost, value: &c.Core.VisitHost},
 	}
 
 	for _, prompt := range prompts {
