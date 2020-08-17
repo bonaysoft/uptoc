@@ -54,7 +54,7 @@ copy to the desired location.
 
 ### Basic
 ```bash
-uptoc --driver oss --region cn-beijing --access_key LTAI4FxxxxxxxBXmS3 --access_secret Vt1FZgxxxxxxxxxxxxKp380AI --bucket demo-bucket /opt/blog/public
+uptoc --driver oss --region cn-beijing --access_key LTAI4FxxxxxxxBXmS3 --secret_key Vt1FZgxxxxxxxxxxxxKp380AI --bucket demo-bucket /opt/blog/public
 ```
 
 And the access-key and access-secret support settings by the system environment
