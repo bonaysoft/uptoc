@@ -7,9 +7,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/saltbo/gopkg/fileutil"
 	"github.com/stretchr/testify/assert"
-
-	"uptoc/utils"
 )
 
 var driverConfigs = []Config{
@@ -81,7 +80,7 @@ func TestUploader(t *testing.T) {
 
 		// test object ETag
 		for _, object := range objects {
-			assert.Equal(t, strings.ToLower(object.ETag), utils.FileMD5(tmp+object.Key))
+			assert.Equal(t, strings.ToLower(object.ETag), fileutil.MD5Hex(tmp+object.Key))
 		}
 
 		// test object delete
