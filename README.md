@@ -1,4 +1,6 @@
 # Uptoc
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsaltbo%2Fuptoc.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsaltbo%2Fuptoc?ref=badge_shield)
+
 
 [![](https://github.com/saltbo/uptoc/workflows/build/badge.svg)](https://github.com/saltbo/uptoc/actions?query=workflow%3Abuild)
 [![](https://codecov.io/gh/saltbo/uptoc/branch/master/graph/badge.svg)](https://codecov.io/gh/saltbo/uptoc)
@@ -104,3 +106,6 @@ See [CONTRIBUTING](CONTRIBUTING.md) for details on submitting patches and the co
 
 ## License
 - [MIT](https://github.com/saltbo/uptoc/blob/master/LICENSE)
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fsaltbo%2Fuptoc.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fsaltbo%2Fuptoc?ref=badge_large)
