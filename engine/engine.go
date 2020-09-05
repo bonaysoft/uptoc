@@ -6,8 +6,9 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/saltbo/gopkg/fileutil"
+
 	"uptoc/uploader"
-	"uptoc/utils"
 )
 
 // Config provides core configuration for the engine.
@@ -99,7 +100,7 @@ func (e *Engine) loadLocalObjects(dirPath string) ([]uploader.Object, error) {
 		localPath := strings.TrimPrefix(filePath, dirPath)
 		localObjects = append(localObjects, uploader.Object{
 			Key:      filepath.Join(e.conf.SaveRoot, localPath),
-			ETag:     utils.FileMD5(filePath),
+			ETag:     fileutil.MD5Hex(filePath),
 			FilePath: filePath,
 		})
 		return nil

@@ -8,8 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
-
-	"uptoc/utils"
+	"github.com/saltbo/gopkg/fileutil"
 )
 
 // S3Uploader implements the Driver base on the S3 of AWS.
@@ -78,7 +77,7 @@ func (u *S3Uploader) Upload(objectKey, filePath string) (err error) {
 		Body:        bodyReader,
 		Bucket:      aws.String(u.bucket),
 		Key:         aws.String(objectKey),
-		ContentType: aws.String(utils.FileContentType(filePath)),
+		ContentType: aws.String(fileutil.DetectContentType(filePath)),
 	})
 	return
 }
