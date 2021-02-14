@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/saltbo/gopkg/fileutil"
@@ -84,8 +85,14 @@ func (e *Engine) uploadFile(filePath, object string) {
 }
 
 func (e *Engine) loadLocalObjects(dirPath string) ([]uploader.Object, error) {
-	if !strings.HasSuffix(dirPath, "/") {
-		dirPath += "/"
+	if runtime.GOOS == "windows" {
+		if !strings.HasSuffix(dirPath, "\\") {
+			dirPath += "\\"
+		}
+	} else {
+		if !strings.HasSuffix(dirPath, "/") {
+			dirPath += "/"
+		}
 	}
 
 	localObjects := make([]uploader.Object, 0)
@@ -114,6 +121,7 @@ func (e *Engine) loadLocalObjects(dirPath string) ([]uploader.Object, error) {
 	return localObjects, nil
 }
 
+// todo compatible windows
 func (e *Engine) shouldExclude(dirPath, filePath string) bool {
 	parentPath := strings.TrimPrefix(dirPath, "./")
 	for _, ePath := range e.conf.Excludes {
