@@ -13,15 +13,18 @@ type Syncer struct {
 
 	tobeUploadedObjects []uploader.Object
 	tobeDeletedObjects  []uploader.Object
+
+	ossExcludes []string
 }
 
 // NewSyncer returns a new syncer.
-func NewSyncer(uploadDriver uploader.Driver) *Syncer {
+func NewSyncer(uploadDriver uploader.Driver, ossExcludes []string) *Syncer {
 	return &Syncer{
 		uploader: uploadDriver,
 
 		tobeUploadedObjects: make([]uploader.Object, 0),
 		tobeDeletedObjects:  make([]uploader.Object, 0),
+		ossExcludes:         ossExcludes,
 	}
 }
 
@@ -76,9 +79,20 @@ func (s *Syncer) compareObjects(localObjects, remoteObjects []uploader.Object) {
 		if s.objectExist(remoteObject, localObjects) {
 			continue
 		}
-
-		s.tobeDeletedObjects = append(s.tobeDeletedObjects, remoteObject)
+		if !s.shouldExcludes(remoteObject.Key) {
+			s.tobeDeletedObjects = append(s.tobeDeletedObjects, remoteObject)
+		}
 	}
+}
+
+func (s *Syncer) shouldExcludes(key string) bool {
+	for _, v := range s.ossExcludes {
+		ret := strings.HasPrefix(key, v)
+		if ret {
+			return true
+		}
+	}
+	return false
 }
 
 func (s *Syncer) objectExist(object uploader.Object, objects []uploader.Object) bool {

@@ -13,10 +13,11 @@ import (
 
 // Config provides core configuration for the engine.
 type Config struct {
-	SaveRoot  string   `yaml:"save_root"`
-	VisitHost string   `yaml:"visit_host"`
-	ForceSync bool     `yaml:"force_sync"`
-	Excludes  []string `yaml:"excludes"`
+	SaveRoot    string   `yaml:"save_root"`
+	VisitHost   string   `yaml:"visit_host"`
+	ForceSync   bool     `yaml:"force_sync"`
+	Excludes    []string `yaml:"excludes"`
+	OssExcludes []string `yaml:"oss_excludes"`
 }
 
 // Engine provides the core logic to finish the feature
@@ -60,7 +61,7 @@ func (e *Engine) uploadDirectory(dirPath string) {
 
 	// directory sync
 	if e.conf.ForceSync {
-		s := NewSyncer(e.uploader)
+		s := NewSyncer(e.uploader, e.conf.OssExcludes)
 		if err := s.Sync(objects, e.conf.SaveRoot); err != nil {
 			log.Fatalln(err)
 		}

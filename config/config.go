@@ -43,6 +43,9 @@ func NewWithCtx(ctx *cli.Context) (*Config, error) {
 		if exclude := ctx.String(uploaderExclude); exclude != "" {
 			c.Core.Excludes = strings.Split(exclude, ",")
 		}
+		if ossExclude := ctx.String(uploaderOssExclude); ossExclude != "" {
+			c.Core.OssExcludes = strings.Split(ossExclude, ",")
+		}
 	} else if err := c.Parse(); err != nil {
 		return nil, err
 	}
