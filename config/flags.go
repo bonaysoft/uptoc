@@ -4,15 +4,15 @@ import "github.com/urfave/cli"
 
 const (
 	// uploader flags
-	uploaderDriver     = "driver"
-	uploaderRegion     = "region"
-	uploaderAccessKey  = "access_key"
-	uploaderSecretKey  = "secret_key"
-	uploaderBucket     = "bucket"
-	uploaderExclude    = "exclude"
-	uploaderSaveRoot   = "save_root"
-	uploaderVisitHost  = "visit_host"
-	uploaderOssExclude = "oss_exclude"
+	uploaderDriver        = "driver"
+	uploaderRegion        = "region"
+	uploaderAccessKey     = "access_key"
+	uploaderSecretKey     = "secret_key"
+	uploaderBucket        = "bucket"
+	uploaderExclude       = "exclude"
+	uploaderSaveRoot      = "save_root"
+	uploaderVisitHost     = "visit_host"
+	uploaderRemoteExclude = "remote_exclude"
 
 	// uploader environments
 	uploaderEnvAccessKey = "UPTOC_UPLOADER_AK"
@@ -53,7 +53,7 @@ var Flags = []cli.Flag{
 		Usage: "specify remote directory, default is root",
 	},
 	cli.StringFlag{
-		Name:  uploaderOssExclude,
-		Usage: "oss exclude",
+		Name:  uploaderRemoteExclude,
+		Usage: "specify exclude the given comma separated remote directories (example: --exclude=.cache,test)",
 	},
 }
