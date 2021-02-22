@@ -31,7 +31,7 @@ func TestSync(t *testing.T) {
 	}
 
 	// test
-	syncer := NewSyncer(&mockUploader{})
+	syncer := NewSyncer(&mockUploader{}, []string{})
 	assert.NoError(t, syncer.Sync(localObjects, ""))
 }
 
@@ -44,12 +44,12 @@ func TestSync2(t *testing.T) {
 		},
 	}
 
-	s := NewSyncer(&mockUploader{listErr: fmt.Errorf("list error")})
+	s := NewSyncer(&mockUploader{listErr: fmt.Errorf("list error")}, []string{})
 	assert.Error(t, s.Sync(objects, ""))
 
-	s = NewSyncer(&mockUploader{uploadErr: fmt.Errorf("upload error")})
+	s = NewSyncer(&mockUploader{uploadErr: fmt.Errorf("upload error")}, []string{})
 	assert.Error(t, s.Sync(objects, ""))
 
-	s = NewSyncer(&mockUploader{deleteErr: fmt.Errorf("delete error")})
+	s = NewSyncer(&mockUploader{deleteErr: fmt.Errorf("delete error")}, []string{})
 	assert.Error(t, s.Sync(objects, ""))
 }
