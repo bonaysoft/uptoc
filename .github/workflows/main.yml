@@ -7,38 +7,38 @@ on:
   pull_request:
 
 jobs:
-#  test:
-#    name: Test
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Set up Go
-#        uses: actions/setup-go@v1
-#        with:
-#          go-version: 1.13
-#      - name: Check out code
-#        uses: actions/checkout@v1
-#      - name: Run Unit tests.
-#        run: make test
-#        env:
-#          UPLOADER_COS_AK: ${{ secrets.UPLOADER_COS_AK }}
-#          UPLOADER_COS_SK: ${{ secrets.UPLOADER_COS_SK }}
-#          UPLOADER_OSS_AK: ${{ secrets.UPLOADER_OSS_AK }}
-#          UPLOADER_OSS_SK: ${{ secrets.UPLOADER_OSS_SK }}
-#          UPLOADER_QINIU_AK: ${{ secrets.UPLOADER_QINIU_AK }}
-#          UPLOADER_QINIU_SK: ${{ secrets.UPLOADER_QINIU_SK }}
-#          UPLOADER_STORAGE_AK: ${{ secrets.UPLOADER_STORAGE_AK }}
-#          UPLOADER_STORAGE_SK: ${{ secrets.UPLOADER_STORAGE_SK }}
-#          UPLOADER_S3_AK: ${{ secrets.UPLOADER_S3_AK }}
-#          UPLOADER_S3_SK: ${{ secrets.UPLOADER_S3_SK }}
-#      - name: Upload Coverage report to CodeCov
-#        uses: codecov/codecov-action@v1.0.0
-#        with:
-#          token: ${{secrets.CODECOV_TOKEN}}
-#          file: .coverprofile
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+      - name: Check out code
+        uses: actions/checkout@v1
+      - name: Run Unit tests.
+        run: make test
+        env:
+          UPLOADER_COS_AK: ${{ secrets.UPLOADER_COS_AK }}
+          UPLOADER_COS_SK: ${{ secrets.UPLOADER_COS_SK }}
+          UPLOADER_OSS_AK: ${{ secrets.UPLOADER_OSS_AK }}
+          UPLOADER_OSS_SK: ${{ secrets.UPLOADER_OSS_SK }}
+          UPLOADER_QINIU_AK: ${{ secrets.UPLOADER_QINIU_AK }}
+          UPLOADER_QINIU_SK: ${{ secrets.UPLOADER_QINIU_SK }}
+          UPLOADER_STORAGE_AK: ${{ secrets.UPLOADER_STORAGE_AK }}
+          UPLOADER_STORAGE_SK: ${{ secrets.UPLOADER_STORAGE_SK }}
+          UPLOADER_S3_AK: ${{ secrets.UPLOADER_S3_AK }}
+          UPLOADER_S3_SK: ${{ secrets.UPLOADER_S3_SK }}
+      - name: Upload Coverage report to CodeCov
+        uses: codecov/codecov-action@v1.0.0
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
+          file: .coverprofile
   build:
     name: Build
     runs-on: ubuntu-latest
-#    needs: [test]
+    needs: [test]
     steps:
       - name: Set up Go
         uses: actions/setup-go@v1
