@@ -2,6 +2,7 @@ package uploader
 
 import (
 	"os"
+	"runtime"
 	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -72,6 +73,10 @@ func (u *S3Uploader) Upload(objectKey, filePath string) (err error) {
 		return err
 	}
 	defer bodyReader.Close()
+
+	if runtime.GOOS == "windows" {
+		objectKey = strings.ReplaceAll(objectKey, "\\", "/")
+	}
 
 	_, err = u.client.PutObject(&s3.PutObjectInput{
 		Body:        bodyReader,
