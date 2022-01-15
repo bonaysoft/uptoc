@@ -19,6 +19,19 @@ type Config struct {
 	Excludes  []string `yaml:"excludes"`
 }
 
+func (c *Config) buildRemoteExcludes() []string {
+	return c.buildExcludes(c.SaveRoot)
+}
+
+func (c *Config) buildExcludes(root string) []string {
+	rets := make([]string, 0)
+	for _, exclude := range c.Excludes {
+		rets = append(rets, filepath.Join(root, exclude))
+	}
+
+	return c.Excludes
+}
+
 // Engine provides the core logic to finish the feature
 type Engine struct {
 	echo
@@ -43,7 +56,10 @@ func (e *Engine) TailRun(paths ...string) {
 			log.Fatalln(err)
 		}
 
-		if stat.IsDir() {
+		if stat.IsDir() && e.conf.ForceSync {
+			e.syncTo(path)
+			continue
+		} else if stat.IsDir() {
 			e.uploadDirectory(path)
 			continue
 		}
@@ -52,23 +68,30 @@ func (e *Engine) TailRun(paths ...string) {
 	}
 }
 
-func (e *Engine) uploadDirectory(dirPath string) {
-	objects, err := e.loadLocalObjects(dirPath)
+func (e *Engine) syncTo(dirPath string) {
+	localObjects, err := e.loadLocalObjects(dirPath)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	// directory sync
-	if e.conf.ForceSync {
-		s := NewSyncer(e.uploader)
-		if err := s.Sync(objects, e.conf.SaveRoot); err != nil {
-			log.Fatalln(err)
-		}
-		return
+	remoteObjects, err := e.uploader.ListObjects(e.conf.SaveRoot)
+	if err != nil {
+		log.Fatalln(err)
 	}
 
-	// directory normal upload
-	for _, obj := range objects {
+	s := NewSyncer(e.uploader, e.conf, dirPath)
+	if err := s.Sync(localObjects, remoteObjects); err != nil {
+		log.Fatalln(err)
+	}
+}
+
+func (e *Engine) uploadDirectory(dirPath string) {
+	localObjects, err := e.loadLocalObjects(dirPath)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	for _, obj := range localObjects {
 		e.uploadFile(obj.FilePath, obj.Key)
 	}
 }
@@ -93,7 +116,7 @@ func (e *Engine) loadLocalObjects(dirPath string) ([]uploader.Object, error) {
 			return err
 		}
 
-		if info.IsDir() || e.shouldExclude(dirPath, filePath) {
+		if info.IsDir() {
 			return nil
 		}
 
@@ -113,10 +136,9 @@ func (e *Engine) loadLocalObjects(dirPath string) ([]uploader.Object, error) {
 	return localObjects, nil
 }
 
-func (e *Engine) shouldExclude(dirPath, filePath string) bool {
-	parentPath := strings.TrimPrefix(dirPath, "./")
-	for _, ePath := range e.conf.Excludes {
-		if strings.HasPrefix(filePath, parentPath+strings.TrimPrefix(ePath, "/")) {
+func shouldExclude(filepath string, excludes []string) bool {
+	for _, ePath := range excludes {
+		if strings.HasPrefix(filepath, ePath) {
 			return true
 		}
 	}
