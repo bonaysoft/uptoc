@@ -40,13 +40,13 @@ var driverConfigs = []Config{
 		AccessKey: os.Getenv("UPLOADER_S3_AK"),
 		SecretKey: os.Getenv("UPLOADER_S3_SK"),
 	},
-	{
-		Name:      "google",
-		Region:    "auto",
-		Bucket:    "ut-uptoc",
-		AccessKey: os.Getenv("UPLOADER_STORAGE_AK"),
-		SecretKey: os.Getenv("UPLOADER_STORAGE_SK"),
-	},
+	//{
+	//	Name:      "google",
+	//	Region:    "auto",
+	//	Bucket:    "ut-uptoc",
+	//	AccessKey: os.Getenv("UPLOADER_STORAGE_AK"),
+	//	SecretKey: os.Getenv("UPLOADER_STORAGE_SK"),
+	//},
 }
 
 func TestUploader(t *testing.T) {

@@ -3,7 +3,7 @@ package engine
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"fmt"
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -13,43 +13,35 @@ import (
 
 func TestSync(t *testing.T) {
 	// init test data
-	files := map[string]string{
-		"abc1.txt": "abcabc",
-		"abc2.txt": "112233",
-		"abc3.txt": "445566",
+	cfg := Config{SaveRoot: "/test/", Excludes: []string{"./abc"}}
+	e := New(cfg, &mockUploader{})
+	localObjects, err := e.loadLocalObjects("./testdata")
+	assert.NoError(t, err)
+
+	// test
+	syncer := NewSyncer(&mockUploader{}, cfg, "./testdata")
+	assert.NoError(t, syncer.Sync(localObjects, mockRemoteObjects(cfg.SaveRoot)))
+}
+
+func mockRemoteObjects(remoteRoot string) []uploader.Object {
+	remoteFiles := map[string]string{
+		"./abc/abc1.txt":        "abcabc",
+		"./aaa/abc2.txt":        "112233",
+		"./bbb/abc3.txt":        "445566",
+		"./testdata/abc/a1.txt": "445566",
+		"./testdata/abc/a2.txt": "445566",
 	}
 
-	localObjects := make([]uploader.Object, 0)
-	for name, content := range files {
+	remoteObjects := make([]uploader.Object, 0)
+	for name, content := range remoteFiles {
 		hash := md5.Sum([]byte(content))
-		localObjects = append(localObjects, uploader.Object{
-			Key:      name,
+		remoteObjects = append(remoteObjects, uploader.Object{
+			Key:      filepath.Join(remoteRoot, name),
 			ETag:     hex.EncodeToString(hash[:]),
 			FilePath: name,
 			Type:     "text/plain",
 		})
 	}
 
-	// test
-	syncer := NewSyncer(&mockUploader{})
-	assert.NoError(t, syncer.Sync(localObjects, ""))
-}
-
-func TestSync2(t *testing.T) {
-	objects := []uploader.Object{
-		{
-			Key:      "test",
-			FilePath: "test",
-			Type:     "text/plain",
-		},
-	}
-
-	s := NewSyncer(&mockUploader{listErr: fmt.Errorf("list error")})
-	assert.Error(t, s.Sync(objects, ""))
-
-	s = NewSyncer(&mockUploader{uploadErr: fmt.Errorf("upload error")})
-	assert.Error(t, s.Sync(objects, ""))
-
-	s = NewSyncer(&mockUploader{deleteErr: fmt.Errorf("delete error")})
-	assert.Error(t, s.Sync(objects, ""))
+	return remoteObjects
 }
